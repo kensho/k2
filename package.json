@@ -4,7 +4,7 @@
   "description": "Functional functional javascript.",
   "main": "k2.js",
   "scripts": {
-    "test": "karma start --single-run"
+    "test": "node node_modules/karma/bin/karma start --single-run"
   },
   "repository": {
     "type": "git",
