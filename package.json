@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kensho/K2.git"
+    "url": "https://github.com/kensho/k2.git"
   },
   "keywords": [
     "javascript",
@@ -18,9 +18,9 @@
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kensho/K2/issues"
+    "url": "https://github.com/kensho/k2/issues"
   },
-  "homepage": "https://github.com/kensho/K2",
+  "homepage": "https://github.com/kensho/k2",
   "devDependencies": {
     "jasmine-core": "^2.2.0",
     "karma": "^0.12.31",
