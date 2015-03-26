@@ -4,7 +4,7 @@
   "description": "Functional functional javascript.",
   "main": "k2.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "karma start --single-run"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,11 @@
   "bugs": {
     "url": "https://github.com/kensho/K2/issues"
   },
-  "homepage": "https://github.com/kensho/K2"
+  "homepage": "https://github.com/kensho/K2",
+  "devDependencies": {
+    "jasmine-core": "^2.2.0",
+    "karma": "^0.12.31",
+    "karma-jasmine": "^0.3.5",
+    "karma-phantomjs-launcher": "^0.1.4"
+  }
 }
