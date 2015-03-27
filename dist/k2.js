@@ -1,128 +1,56 @@
-/**
- * k2 - Functional functional javascript.
- * @version v0.0.0
- */
-"use strict";
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
 
-require("lazy-ass");
-var check = require("check-more-types");
-var _ = require("lodash");
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
 
-function findPartialMatches(property, items, queryText) {
-  la(check.unemptyString(property), "need property name", property);
-  la(check.array(items), "expected list of items", items);
-  la(check.string(queryText), "expected query string", queryText);
-  if (!queryText) {
-    return [];
-  }
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
 
-  var text = queryText.toLowerCase();
-  function hasQueryText(item) {
-    return item[property].toLowerCase().indexOf(text) !== -1;
-  }
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
 
-  return items.filter(hasQueryText);
-}
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 
-function findPartialMatchesMultipleProperties(properties, items, queryText) {
-  if (check.string(properties)) {
-    return findPartialMatches(properties, items, queryText);
-  }
-  la(check.arrayOfStrings(properties), "need properties", properties);
-  la(check.array(items), "expected list of items", items);
-  la(check.string(queryText), "expected query string", queryText);
-  if (!queryText) {
-    return [];
-  }
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
 
-  var text = queryText.toLowerCase();
-  function hasQueryText(item) {
-    return properties.some(function (property) {
-      var value = item[property];
-      if (!value) {
-        return false;
-      }
-      return value.toLowerCase().indexOf(text) !== -1;
-    });
-  }
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
 
-  return items.filter(hasQueryText);
-}
 
-// given objects that match query text, rank them, with better matches first
-function rankPartialMatches(property, matches, queryText) {
-  la(check.unemptyString(property), "need property name", property);
-  la(check.array(matches), "expected list of matches", matches);
-  la(check.string(queryText), "expected query string", queryText);
-  if (!matches.length || !queryText) {
-    return [];
-  }
-  var text = queryText.toLowerCase();
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
 
-  // ranks items, whereby a lower number is a better rank, assumes item
-  // matches the query string.
-  function rankMatch(item) {
-    var NOT_FOUND_RANK = 1000000;
-    var matchText = item[property].toLowerCase();
-    if (matchText === text) {
-      return -1;
-    }
-    var matchStartsAt = matchText.indexOf(text);
-    if (matchStartsAt === -1) {
-      return NOT_FOUND_RANK;
-    }
-    return matchStartsAt;
-  }
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
 
-  return _.sortBy(matches, rankMatch);
-}
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
 
-function rankPartialMatchesMultipleProperties(properties, matches, queryText) {
-  if (check.string(properties)) {
-    return rankPartialMatches(properties, matches, queryText);
-  }
-  la(check.arrayOfStrings(properties), "need properties", properties);
-  la(check.array(matches), "expected list of matches", matches);
-  la(check.string(queryText), "expected query string", queryText);
-  if (!matches.length || !queryText) {
-    return [];
-  }
-  var text = queryText.toLowerCase();
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
 
-  // ranks items, whereby a lower number is a better rank, assumes item
-  // matches the query string.
-  function rankMatch(property, item) {
-    var NOT_FOUND_RANK = 1000000;
-    var matchText = item[property];
-    if (!matchText) {
-      return NOT_FOUND_RANK;
-    }
-    matchText = matchText.toLowerCase();
-    if (matchText === text) {
-      return -1;
-    }
-    var matchStartsAt = matchText.indexOf(text);
-    if (matchStartsAt === -1) {
-      return NOT_FOUND_RANK;
-    }
-    return matchStartsAt;
-  }
+	"use strict";
 
-  // best match over multiple properties is the smallest match
-  function rankMatches(item) {
-    var ranks = properties.map(function (property) {
-      return rankMatch(property, item);
-    });
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var k2 = {};
+	exports.k2 = k2;
 
-    return _.min(ranks);
-  }
-
-  return _.sortBy(matches, rankMatches);
-}
-
-var matchers = {
-  findPartialMatches: findPartialMatchesMultipleProperties,
-  rankPartialMatches: rankPartialMatchesMultipleProperties
-};
-
-module.exports = matchers;
+/***/ }
+/******/ ]);

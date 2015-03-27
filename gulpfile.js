@@ -17,6 +17,7 @@ var gulp = require('gulp'),
   del = require('del'),
   watch = require('gulp-watch'),
   gutil = require('gulp-util'),
+  webpack = require('gulp-webpack'),
   header = require('gulp-header');
 var glob = require('glob');
 var ngHtml2Js = require('gulp-ng-html2js');
@@ -107,6 +108,28 @@ gulp.task('js', ['templates'], function () {
     .pipe(uglify())
     .pipe(gulp.dest(dest))
     .pipe(notify({ message: 'js task complete' }));
+});
+
+gulp.task('webpack', ['templates'], function () {
+  var jsAndTemplates = src.concat(dest + '/*.templates.js');
+  return gulp.src('./k2.es6')
+    .pipe(webpack({
+      module: {
+        loaders: [
+          { test: /\.es6$/, exclude: /node_modules/, loader: 'babel-loader' }
+        ],
+      },
+      output: {
+        filename: 'k2.js',
+      }
+    }))
+    // .pipe(concat(pkg.name + '.js'))
+    // .pipe(header(banner, { pkg: pkg }))
+    .pipe(gulp.dest(dest))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(uglify())
+    .pipe(gulp.dest(dest))
+    .pipe(notify({ message: 'webpack task complete' }));
 });
 
 gulp.task('mocha', function () {
