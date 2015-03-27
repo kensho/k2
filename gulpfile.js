@@ -111,7 +111,7 @@ gulp.task('js', ['templates'], function () {
 });
 
 gulp.task('webpack', ['templates'], function () {
-  var jsAndTemplates = src.concat(dest + '/*.templates.js');
+  // var jsAndTemplates = src.concat(dest + '/*.templates.js');
   // TODO(gleb): concat with template code
   return gulp.src('./k2.es6')
     .pipe(webpack({
@@ -119,7 +119,7 @@ gulp.task('webpack', ['templates'], function () {
       module: {
         loaders: [
           { test: /\.es6$/, exclude: /node_modules/, loader: 'babel-loader' }
-        ],
+        ]
       },
       output: {
         filename: 'k2.js',
@@ -149,12 +149,12 @@ gulp.task('test', ['mocha', 'grunt-clean-console']);
 gulp.task('watch', function() {
   var options = { ignoreInitial: true };
   watch(src, options, function () {
-    gulp.start('lint', 'js');
+    gulp.start('lint', 'webpack');
   });
 });
 
 gulp.task('lint', ['lint:src', 'lint:specs', 'lint:gulpfile']);
 
 gulp.task('default', ['deps-ok', 'grunt-nice-package', 'clean'], function () {
-  gulp.start('lint', 'js');
+  gulp.start('lint', 'webpack');
 });
