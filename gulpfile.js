@@ -13,6 +13,7 @@ var gulp = require('gulp'),
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
   notify = require('gulp-notify'),
+  babel = require('gulp-babel'),
   del = require('del'),
   watch = require('gulp-watch'),
   gutil = require('gulp-util'),
@@ -100,6 +101,7 @@ gulp.task('js', ['templates'], function () {
   return gulp.src(jsAndTemplates)
     .pipe(concat(pkg.name + '.js'))
     .pipe(header(banner, { pkg: pkg }))
+    .pipe(babel())
     .pipe(gulp.dest(dest))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())

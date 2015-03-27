@@ -2,14 +2,16 @@
  * k2 - Functional functional javascript.
  * @version v0.0.0
  */
-require('lazy-ass');
-var check = require('check-more-types');
-var _ = require('lodash');
+"use strict";
+
+require("lazy-ass");
+var check = require("check-more-types");
+var _ = require("lodash");
 
 function findPartialMatches(property, items, queryText) {
-  la(check.unemptyString(property), 'need property name', property);
-  la(check.array(items), 'expected list of items', items);
-  la(check.string(queryText), 'expected query string', queryText);
+  la(check.unemptyString(property), "need property name", property);
+  la(check.array(items), "expected list of items", items);
+  la(check.string(queryText), "expected query string", queryText);
   if (!queryText) {
     return [];
   }
@@ -26,9 +28,9 @@ function findPartialMatchesMultipleProperties(properties, items, queryText) {
   if (check.string(properties)) {
     return findPartialMatches(properties, items, queryText);
   }
-  la(check.arrayOfStrings(properties), 'need properties', properties);
-  la(check.array(items), 'expected list of items', items);
-  la(check.string(queryText), 'expected query string', queryText);
+  la(check.arrayOfStrings(properties), "need properties", properties);
+  la(check.array(items), "expected list of items", items);
+  la(check.string(queryText), "expected query string", queryText);
   if (!queryText) {
     return [];
   }
@@ -49,9 +51,9 @@ function findPartialMatchesMultipleProperties(properties, items, queryText) {
 
 // given objects that match query text, rank them, with better matches first
 function rankPartialMatches(property, matches, queryText) {
-  la(check.unemptyString(property), 'need property name', property);
-  la(check.array(matches), 'expected list of matches', matches);
-  la(check.string(queryText), 'expected query string', queryText);
+  la(check.unemptyString(property), "need property name", property);
+  la(check.array(matches), "expected list of matches", matches);
+  la(check.string(queryText), "expected query string", queryText);
   if (!matches.length || !queryText) {
     return [];
   }
@@ -60,7 +62,7 @@ function rankPartialMatches(property, matches, queryText) {
   // ranks items, whereby a lower number is a better rank, assumes item
   // matches the query string.
   function rankMatch(item) {
-    var NOT_FOUND_RANK = 1e6;
+    var NOT_FOUND_RANK = 1000000;
     var matchText = item[property].toLowerCase();
     if (matchText === text) {
       return -1;
@@ -79,9 +81,9 @@ function rankPartialMatchesMultipleProperties(properties, matches, queryText) {
   if (check.string(properties)) {
     return rankPartialMatches(properties, matches, queryText);
   }
-  la(check.arrayOfStrings(properties), 'need properties', properties);
-  la(check.array(matches), 'expected list of matches', matches);
-  la(check.string(queryText), 'expected query string', queryText);
+  la(check.arrayOfStrings(properties), "need properties", properties);
+  la(check.array(matches), "expected list of matches", matches);
+  la(check.string(queryText), "expected query string", queryText);
   if (!matches.length || !queryText) {
     return [];
   }
@@ -90,7 +92,7 @@ function rankPartialMatchesMultipleProperties(properties, matches, queryText) {
   // ranks items, whereby a lower number is a better rank, assumes item
   // matches the query string.
   function rankMatch(property, item) {
-    var NOT_FOUND_RANK = 1e6;
+    var NOT_FOUND_RANK = 1000000;
     var matchText = item[property];
     if (!matchText) {
       return NOT_FOUND_RANK;
@@ -124,4 +126,3 @@ var matchers = {
 };
 
 module.exports = matchers;
-
