@@ -1,4 +1,18 @@
-/******/ (function(modules) { // webpackBootstrap
+/**
+ * k2 - Functional functional javascript.
+ * @version v0.0.0
+ */
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define(factory);
+	else if(typeof exports === 'object')
+		exports["k2"] = factory();
+	else
+		root["k2"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -49,8 +63,11 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	console.log("exporting k2");
 	var k2 = {};
 	exports.k2 = k2;
 
 /***/ }
-/******/ ]);
+/******/ ])
+});
+;

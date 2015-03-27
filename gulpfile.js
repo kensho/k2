@@ -112,8 +112,10 @@ gulp.task('js', ['templates'], function () {
 
 gulp.task('webpack', ['templates'], function () {
   var jsAndTemplates = src.concat(dest + '/*.templates.js');
+  // TODO(gleb): concat with template code
   return gulp.src('./k2.es6')
     .pipe(webpack({
+      entry: './k2.es6',
       module: {
         loaders: [
           { test: /\.es6$/, exclude: /node_modules/, loader: 'babel-loader' }
@@ -121,10 +123,12 @@ gulp.task('webpack', ['templates'], function () {
       },
       output: {
         filename: 'k2.js',
+        library: 'k2',
+        libraryTarget: 'umd'
       }
     }))
     // .pipe(concat(pkg.name + '.js'))
-    // .pipe(header(banner, { pkg: pkg }))
+    .pipe(header(banner, { pkg: pkg }))
     .pipe(gulp.dest(dest))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
@@ -140,7 +144,7 @@ gulp.task('mocha', function () {
     }));
 });
 
-gulp.task('test', ['mocha']);
+gulp.task('test', ['mocha', 'grunt-clean-console']);
 
 gulp.task('watch', function() {
   var options = { ignoreInitial: true };
