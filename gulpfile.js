@@ -19,6 +19,7 @@ var gulp = require('gulp'),
   header = require('gulp-header');
 var glob = require('glob');
 var ngHtml2Js = require('gulp-ng-html2js');
+var mocha = require('gulp-mocha');
 var join = require('path').join;
 var pkg = require('./package.json');
 
@@ -107,13 +108,15 @@ gulp.task('js', ['templates'], function () {
     .pipe(notify({ message: 'js task complete' }));
 });
 
-var karma = require('karma').server;
-gulp.task('test', function (done) {
-  karma.start({
-    configFile: join(__dirname, 'karma.conf.js'),
-    singleRun: true
-  }, done);
+gulp.task('mocha', function () {
+  return gulp.src(specs, {read: false})
+    .pipe(mocha({
+      reporter: 'dot',
+      ui: 'bdd'
+    }));
 });
+
+gulp.task('test', ['mocha']);
 
 gulp.task('watch', function() {
   var options = { ignoreInitial: true };
