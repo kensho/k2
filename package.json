@@ -63,11 +63,15 @@
   ],
   "license": "MIT",
   "main": "k2.js",
+  "pre-commit": [
+    "npm test",
+    "npm version"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/kensho/k2.git"
   },
   "scripts": {
-    "test": "node node_modules/karma/bin/karma start --single-run"
+    "test": "gulp test"
   }
 }

@@ -1,6 +1,7 @@
 /* global describe, beforeEach, it */
 require('lazy-ass');
 var check = require('check-more-types');
+var _ = require('lodash');
 
 describe('partial matching', function () {
   var matching = require('./partial-matching');
