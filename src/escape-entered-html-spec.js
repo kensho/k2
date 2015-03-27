@@ -1,4 +1,4 @@
-/* global describe, helpDescribe, beforeEach, it */
+/* global helpDescribe, it */
 require('lazy-ass');
 require('lazy-ass-helpful');
 require('lazy-ass-helpful/lazy-ass-helpful-bdd.js');

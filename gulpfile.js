@@ -20,7 +20,6 @@ var gulp = require('gulp'),
 var glob = require('glob');
 var ngHtml2Js = require('gulp-ng-html2js');
 var mocha = require('gulp-mocha');
-var join = require('path').join;
 var pkg = require('./package.json');
 
 var banner = ['/**',

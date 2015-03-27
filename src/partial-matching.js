@@ -1,3 +1,7 @@
+require('lazy-ass');
+var check = require('check-more-types');
+var _ = require('lodash');
+
 function findPartialMatches(property, items, queryText) {
   la(check.unemptyString(property), 'need property name', property);
   la(check.array(items), 'expected list of items', items);
