@@ -63,7 +63,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	console.log("exporting k2");
 	var k2 = {};
 	exports.k2 = k2;
 
