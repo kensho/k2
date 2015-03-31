@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.2.1
+ * @version v0.3.0
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -11,7 +11,7 @@
 		exports["k2"] = factory(require("la"), require("check"), require("_"));
 	else
 		root["k2"] = factory(root["la"], root["check"], root["_"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -66,9 +66,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var rankPartialMatches = _interopRequire(__webpack_require__(2));
 
+	var cleanText = _interopRequire(__webpack_require__(3));
+
 	module.exports = {
 	  findPartialMatches: findPartialMatches,
-	  rankPartialMatches: rankPartialMatches
+	  rankPartialMatches: rankPartialMatches,
+	  cleanEnteredText: cleanText
 	};
 
 /***/ },
@@ -77,9 +80,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(3);
-	var check = __webpack_require__(4);
-	var _ = __webpack_require__(5);
+	__webpack_require__(4);
+	var check = __webpack_require__(5);
+	var _ = __webpack_require__(6);
 
 	function findPartialMatchesSingleProperty(property, items, queryText) {
 	  la(check.unemptyString(property), "need property name", property);
@@ -130,9 +133,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(3);
-	var check = __webpack_require__(4);
-	var _ = __webpack_require__(5);
+	__webpack_require__(4);
+	var check = __webpack_require__(5);
+	var _ = __webpack_require__(6);
 
 	// given objects that match query text, rank them, with better matches first
 	function rankPartialMatchesSingleProperty(property, matches, queryText) {
@@ -211,7 +214,25 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+	
+
+	/**
+	Removes HTML entities added by TextArea. Used in ticker search
+	@method cleanEnteredSearchText */
+	"use strict";
+
+	module.exports = cleanEnteredSearchText;
+	__webpack_require__(4);
+	var check = __webpack_require__(5);
+	var _ = __webpack_require__(6);
+	function cleanEnteredSearchText(str) {
+	  la(check.string(str), "expected string to clean", str);
+	  str = str.toLowerCase();
+	  str = str.replace("&nbsp;", " ");
+	  str = str.trim();
+	  str = _.unescape(str);
+	  return str;
+	}
 
 /***/ },
 /* 4 */
@@ -224,6 +245,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
 
 /***/ }
 /******/ ])
