@@ -1,6 +1,6 @@
 /**
- * k2 - Functional functional javascript.
- * @version v0.0.0
+ * k2 - Functional javascript utils
+ * @version v0.2.0
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -11,7 +11,7 @@
 		exports["k2"] = factory(require("la"), require("check"), require("_"));
 	else
 		root["k2"] = factory(root["la"], root["check"], root["_"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__, __WEBPACK_EXTERNAL_MODULE_5__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -62,20 +62,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	/*
-	import findPartialMatches from './find-partial-matches.es6'
-	*/
+	var findPartialMatches = _interopRequire(__webpack_require__(1));
 
-	var rankPartialMatches = _interopRequire(__webpack_require__(1));
+	var rankPartialMatches = _interopRequire(__webpack_require__(2));
 
-	var k2 = {
-	  // findPartialMatches: findPartialMatches,
+	module.exports = {
+	  findPartialMatches: findPartialMatches,
 	  rankPartialMatches: rankPartialMatches
 	};
-	exports.k2 = k2;
 
 /***/ },
 /* 1 */
@@ -83,9 +77,62 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(2);
-	var check = __webpack_require__(3);
-	var _ = __webpack_require__(4);
+	__webpack_require__(3);
+	var check = __webpack_require__(4);
+	var _ = __webpack_require__(5);
+
+	function findPartialMatchesSingleProperty(property, items, queryText) {
+	  la(check.unemptyString(property), "need property name", property);
+	  la(check.array(items), "expected list of items", items);
+	  la(check.string(queryText), "expected query string", queryText);
+	  if (!queryText) {
+	    return [];
+	  }
+
+	  var text = queryText.toLowerCase();
+	  function hasQueryText(item) {
+	    return item[property].toLowerCase().indexOf(text) !== -1;
+	  }
+
+	  return items.filter(hasQueryText);
+	}
+
+	function findPartialMatchesMultipleProperties(properties, items, queryText) {
+	  if (check.string(properties)) {
+	    return findPartialMatchesSingleProperty(properties, items, queryText);
+	  }
+	  la(check.arrayOfStrings(properties), "need properties", properties);
+	  la(check.array(items), "expected list of items", items);
+	  la(check.string(queryText), "expected query string", queryText);
+	  if (!queryText) {
+	    return [];
+	  }
+
+	  var text = queryText.toLowerCase();
+	  function hasQueryText(item) {
+	    return properties.some(function (property) {
+	      var value = item[property];
+	      if (!value) {
+	        return false;
+	      }
+	      return value.toLowerCase().indexOf(text) !== -1;
+	    });
+	  }
+
+	  return items.filter(hasQueryText);
+	}
+
+	module.exports = findPartialMatchesMultipleProperties;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	__webpack_require__(3);
+	var check = __webpack_require__(4);
+	var _ = __webpack_require__(5);
 
 	// given objects that match query text, rank them, with better matches first
 	function rankPartialMatchesSingleProperty(property, matches, queryText) {
@@ -161,12 +208,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = rankPartialMatchesMultipleProperties;
 
 /***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
-
-/***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -177,6 +218,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_5__;
 
 /***/ }
 /******/ ])

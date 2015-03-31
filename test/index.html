@@ -3,10 +3,20 @@
 
 <head>
   <script src="../node_modules/es5-shim/es5-shim.js"></script>
+  <script src="../node_modules/lazy-ass/index.js"></script>
+  <script src="../node_modules/check-types/src/check-types.js"></script>
   <script src="../dist/k2.js"></script>
 </head>
 
 <body>
   <p>testing k2 load</p>
+  <script src="../node_modules/console-log-div/console-log-div.js"></script>
+  <script>
+  (function testK2(root) {
+    console.log('testing k2');
+    la(check.object(root.k2), 'cannot find k2');
+    la(check.fn(root.k2.findPartialMatches), 'has findPartialMatches');
+  }(window));
+  </script>
 </body>
 </html>
