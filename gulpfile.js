@@ -101,7 +101,12 @@ gulp.task('webpack', function () {
         filename: 'k2.js',
         library: 'k2',
         libraryTarget: 'umd'
-      }
+      }/*,
+      externals: {
+        '_': '_',
+        'check': 'check-types',
+        'la': 'lazy-ass'
+      }*/
     }))
     // .pipe(concat(pkg.name + '.js'))
     .pipe(header(banner, { pkg: pkg }))
@@ -113,11 +118,13 @@ gulp.task('webpack', function () {
 });
 
 gulp.task('mocha', function () {
-  var outputFolder = process.env.CIRCLE_TEST_REPORTS || '.';
-  var outputFilename = join(outputFolder, 'junit.xml');
+  var outputFolder = process.env.CIRCLE_TEST_REPORTS;
+  var outputFilename = outputFolder ? join(outputFolder, 'junit.xml') : null;
+  var reporter = outputFilename ? 'xunit' : 'spec';
+
   return gulp.src(specs, {read: false})
     .pipe(mocha({
-      reporter: 'xunit',
+      reporter: reporter,
       ui: 'bdd',
       reporterOptions: {
         output: outputFilename
