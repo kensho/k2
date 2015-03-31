@@ -22,6 +22,7 @@ var gulp = require('gulp'),
 var glob = require('glob');
 var mocha = require('gulp-mocha');
 var pkg = require('./package.json');
+var join = require('path').join;
 
 var banner = ['/**',
   ' * <%= pkg.name %> - <%= pkg.description %>',
@@ -112,10 +113,15 @@ gulp.task('webpack', function () {
 });
 
 gulp.task('mocha', function () {
+  var outputFolder = process.env.CIRCLE_TEST_REPORTS || '.';
+  var outputFilename = join(outputFolder, 'junit.xml');
   return gulp.src(specs, {read: false})
     .pipe(mocha({
-      reporter: 'dot',
-      ui: 'bdd'
+      reporter: 'xunit',
+      ui: 'bdd',
+      reporterOptions: {
+        output: outputFilename
+      }
     }));
 });
 
