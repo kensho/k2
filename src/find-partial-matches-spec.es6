@@ -4,7 +4,7 @@ var check = require('check-more-types');
 var _ = require('lodash');
 
 describe('partial matching', function () {
-  var matching = require('./find-partial-matches');
+  import matching from './find-partial-matches.es6';
   var findPartialMatches;
 
   beforeEach('has methods for matching', function () {
