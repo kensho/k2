@@ -43,4 +43,4 @@ function findPartialMatchesMultipleProperties(properties, items, queryText) {
   return items.filter(hasQueryText);
 }
 
-export findPartialMatches findPartialMatchesMultipleProperties;
+export default findPartialMatchesMultipleProperties;
