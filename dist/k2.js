@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.2.0
+ * @version v0.2.1
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
