@@ -4,14 +4,14 @@
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory();
+		module.exports = factory(require("la"), require("check"), require("_"));
 	else if(typeof define === 'function' && define.amd)
-		define(factory);
+		define(["la", "check", "_"], factory);
 	else if(typeof exports === 'object')
-		exports["k2"] = factory();
+		exports["k2"] = factory(require("la"), require("check"), require("_"));
 	else
-		root["k2"] = factory();
-})(this, function() {
+		root["k2"] = factory(root["la"], root["check"], root["_"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -81,15 +81,13 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/*
-	require('lazy-ass');
-	var check = require('check-more-types');
-	var _ = require('lodash');
-	*/
-
-	// given objects that match query text, rank them, with better matches first
 	"use strict";
 
+	__webpack_require__(2);
+	var check = __webpack_require__(3);
+	var _ = __webpack_require__(4);
+
+	// given objects that match query text, rank them, with better matches first
 	function rankPartialMatchesSingleProperty(property, matches, queryText) {
 	  la(check.unemptyString(property), "need property name", property);
 	  la(check.array(matches), "expected list of matches", matches);
@@ -161,6 +159,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	module.exports = rankPartialMatchesMultipleProperties;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_3__;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_4__;
 
 /***/ }
 /******/ ])

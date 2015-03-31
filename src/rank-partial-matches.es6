@@ -1,8 +1,6 @@
-/*
 require('lazy-ass');
 var check = require('check-more-types');
 var _ = require('lodash');
-*/
 
 // given objects that match query text, rank them, with better matches first
 function rankPartialMatchesSingleProperty(property, matches, queryText) {

@@ -101,12 +101,12 @@ gulp.task('webpack', function () {
         filename: 'k2.js',
         library: 'k2',
         libraryTarget: 'umd'
-      }/*,
+      },
       externals: {
-        '_': '_',
-        'check': 'check-types',
-        'la': 'lazy-ass'
-      }*/
+        'lodash': '_',
+        'check-more-types': 'check',
+        'lazy-ass': 'la'
+      }
     }))
     // .pipe(concat(pkg.name + '.js'))
     .pipe(header(banner, { pkg: pkg }))
