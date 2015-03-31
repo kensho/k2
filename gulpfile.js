@@ -7,6 +7,8 @@ var log = require('debug-logdown')('gulp');
 var bold = require('quote')({ quotes: '*' });
 log.info('node', bold(process.version));
 
+require('babel-core/register');
+
 var gulp = require('gulp'),
   eslint = require('gulp-eslint'),
   uglify = require('gulp-uglify'),
@@ -37,13 +39,13 @@ var src = glob.sync('src/**/*.js', 'src/**/*.es6');
 log.log('all source files:\n' + src.join('\n  '));
 
 // need to skip specs
-function isJsTest(filename) {
-  return !/-spec\.js$/.test(filename);
+function isSpecFile(filename) {
+  return !/-spec\./.test(filename);
 }
-src = src.filter(isJsTest);
+src = src.filter(isSpecFile);
 log.log('just source files:\n' + src.join('\n  '));
 
-var specs = ['src/**/*-spec.js'];
+var specs = ['src/**/*-spec.js', 'src/**/*-spec.es6'];
 var dest = './dist';
 
 gulp.task('deps-ok', function () {
