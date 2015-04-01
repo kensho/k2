@@ -5,6 +5,7 @@
 [![NPM][k2-icon] ][k2-url]
 
 [![Circle CI](https://circleci.com/gh/kensho/k2.svg?style=svg)](https://circleci.com/gh/kensho/k2)
+[![Code Climate](https://codeclimate.com/github/kensho/k2/badges/gpa.svg)](https://codeclimate.com/github/kensho/k2)
 
 [k2-icon]: https://nodei.co/npm/k2.png?downloads=true
 [k2-url]: https://npmjs.org/package/k2
