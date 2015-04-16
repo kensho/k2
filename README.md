@@ -10,6 +10,75 @@
 [k2-icon]: https://nodei.co/npm/k2.png?downloads=true
 [k2-url]: https://npmjs.org/package/k2
 
+## Api
+
+### cleanEnteredText
+
+Removes HTML entities from user-entered text. Common entities introduced by a textarea element
+are `&nbsp;` at the end.
+
+```js
+var cleanText = k2.cleanEnteredText(text);
+// text - string entered into a textarea
+```
+
+```js
+k2.cleanEnteredText('FOO&nbsp;b') // 'foo b'
+k2.cleanEnteredText('foo&nbsp;') // 'foo'
+```
+
+### findPartialMatches
+
+Finds all items where given properties are matching the given query text.
+
+```js
+var matches = k2.findPartialMatches(properties, items, queryText);
+// properties - single string or an array of strings
+// items - objects to search over
+// queryText - single string
+```
+
+```js
+// find all items where property 'foo' contains 'ooo'
+var items = [{
+  foo: 'foo'
+}, {
+  foo: 'foo2'
+}, {
+  foo: 'bar'
+}];
+var result = k2.findPartialMatches('foo', items, 'oo');
+// result is [ items[0], items[1] ]
+```
+
+### rankPartialMatches
+
+Useful to order items by text entered by the user, but only considering matches of query text to
+certain properties. Items without any matches will be pushed to the back of the returned list.
+
+```js
+var matches = k2.rankPartialMatches(properties, matches, queryText);
+// properties - single string or array of strings
+// matches - objects to search
+// queryText - single string
+```
+
+```js
+var items = [{
+    foo: 'foo'
+}, {
+    foo: 'foo2',
+    bar: 'abar'
+}, {
+    foo: 'bar'
+}];
+var result = k2.rankPartialMatches(['foo', 'bar'], items, 'bar');
+// result is a new array with 3 items
+// result[0] is items[2] (exact match)
+// result[1] is items[1] (partial match)
+// result[2] is items[0] (nothing matches)
+```
+
 ### Small print
 
 Author: Kensho &copy; 2015
