@@ -1,7 +1,7 @@
 {
   "name": "k2",
   "description": "Functional javascript utils",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "author": "Martin Camacho martin@kensho.com",
   "bugs": {
     "url": "https://github.com/kensho/k2/issues"
@@ -10,11 +10,16 @@
     "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
     "Matt Neary <neary@kensho.com>"
   ],
+  "dependencies": {
+    "check-more-types": "1.5.0",
+    "check-types": "1.4.0",
+    "lazy-ass": "0.5.3",
+    "lodash": "3.6.0",
+    "ramda": "0.14.0"
+  },
   "devDependencies": {
     "babel-core": "4.7.16",
     "babel-loader": "4.2.0",
-    "check-more-types": "1.5.0",
-    "check-types": "1.4.0",
     "console-log-div": "0.5.0",
     "debug-logdown": "0.2.0",
     "del": "1.1.1",
@@ -50,16 +55,13 @@
     "karma-ng-html2js-preprocessor": "0.1.2",
     "karma-ng-json2js-preprocessor": "1.0.0",
     "karma-phantomjs-launcher": "0.1.4",
-    "lazy-ass": "0.5.3",
     "lazy-ass-helpful": "0.6.1",
-    "lodash": "3.6.0",
     "mocha-traceur": "2.1.0",
     "modernizr": "3.0.0-alpha.3",
     "ng-describe": "0.10.1",
     "ng-waffle": "0.2.2",
     "pre-git": "0.2.1",
     "quote": "0.4.0",
-    "ramda": "0.14.0",
     "spy-on-lazy-ass": "0.0.1",
     "webpack": "1.7.3"
   },
@@ -83,7 +85,7 @@
     "url": "https://github.com/kensho/k2.git"
   },
   "scripts": {
-    "test": "gulp test; npm run test-under-node",
+    "test": "gulp test; npm run test-under-node; npm run load-from-node",
     "test-under-node": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6",
     "load-from-node": "node dist/k2.js"
   }

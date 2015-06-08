@@ -103,9 +103,9 @@ gulp.task('webpack', function () {
         libraryTarget: 'umd'
       },
       externals: {
-        'lodash': '_',
-        'check-more-types': 'check',
-        'lazy-ass': 'la'
+        'lodash': 'lodash',
+        'check-more-types': 'check-more-types',
+        'lazy-ass': 'lazy-ass'
       }
     }))
     // .pipe(concat(pkg.name + '.js'))

@@ -1,16 +1,16 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.4.0
+ * @version v0.4.1
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("la"), require("check"), require("_"));
+		module.exports = factory(require("lazy-ass"), require("check-more-types"), require("lodash"));
 	else if(typeof define === 'function' && define.amd)
-		define(["la", "check", "_"], factory);
+		define(["lazy-ass", "check-more-types", "lodash"], factory);
 	else if(typeof exports === 'object')
-		exports["k2"] = factory(require("la"), require("check"), require("_"));
+		exports["k2"] = factory(require("lazy-ass"), require("check-more-types"), require("lodash"));
 	else
-		root["k2"] = factory(root["la"], root["check"], root["_"]);
+		root["k2"] = factory(root["lazy-ass"], root["check-more-types"], root["lodash"]);
 })(this, function(__WEBPACK_EXTERNAL_MODULE_5__, __WEBPACK_EXTERNAL_MODULE_6__, __WEBPACK_EXTERNAL_MODULE_7__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -243,8 +243,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(5);
-	var check = __webpack_require__(6);
 	var R = __webpack_require__(8);
 
 	/**
