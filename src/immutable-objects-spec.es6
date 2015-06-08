@@ -20,9 +20,16 @@ describe('immutable objects', function () {
   it('immutably maps value by function', function () {
     var o = { name: 'joe', age: 20 };
     var updated = objectLens('age').map(R.add(1), o);
-    la(o.age === 20);
+    la(o !== updated && o.age === 20);
     la(updated.age === o.age + 1 &&
        updated.name === o.name);
+  });
+
+  it('lenses are chainable', function () {
+    var o = { name: 'joe', age: 20 };
+    var updated = R.compose(objectLens('name').set('matt'),
+      objectLens('age').map(R.add(1)))(o);
+    la(updated.name === 'matt' && updated.age === 21);
   });
 });
 

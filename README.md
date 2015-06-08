@@ -93,6 +93,15 @@ objectLens('age').map(R.add(1), { age: 19 });
 // => { age: 20 }
 ```
 
+To compose setters, use function composition!
+
+```js
+var setter = R.compose(objectLens('name').set('matt'),
+  objectLens('age').map(R.add(1)));
+setter({ name: 'joe', age: 19 })
+// => { name: 'matt', age: 20 }
+```
+
 ### Small print
 
 Author: Kensho &copy; 2015
