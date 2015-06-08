@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.4.2
+ * @version v0.4.3
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -83,9 +83,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(5);
+	__webpack_require__(6);
 	var check = __webpack_require__(7);
-	var _ = __webpack_require__(6);
+	var _ = __webpack_require__(5);
 
 	function findPartialMatchesSingleProperty(property, items, queryText) {
 	  la(check.unemptyString(property), "need property name", property);
@@ -136,9 +136,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(5);
+	__webpack_require__(6);
 	var check = __webpack_require__(7);
-	var _ = __webpack_require__(6);
+	var _ = __webpack_require__(5);
 
 	// given objects that match query text, rank them, with better matches first
 	function rankPartialMatchesSingleProperty(property, matches, queryText) {
@@ -225,9 +225,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	module.exports = cleanEnteredSearchText;
-	__webpack_require__(5);
+	__webpack_require__(6);
 	var check = __webpack_require__(7);
-	var _ = __webpack_require__(6);
+	var _ = __webpack_require__(5);
 	function cleanEnteredSearchText(str) {
 	  la(check.string(str), "expected string to clean", str);
 	  str = str.toLowerCase();
@@ -252,9 +252,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return R.lens(R.prop(key), function (val, obj) {
 	    var child = Object.create(obj);
 	    child.toJSON = function () {
-	      var base = {};
+	      var base;
 	      if (obj.toJSON) {
-	        var base = obj.toJSON();
+	        base = obj.toJSON();
+	      } else {
+	        base = R.pick(Object.keys(obj), obj);
 	      }
 	      base[key] = val;
 	      return base;
@@ -268,105 +270,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {(function initLazyAss() {
-
-	  function isArrayLike(a) {
-	    return a && typeof a.length === 'number';
-	  }
-
-	  function formMessage(args) {
-	    var msg = args.reduce(function (total, arg, k) {
-	      if (k) {
-	        total += ' ';
-	      }
-	      if (typeof arg === 'string') {
-	        return total + arg;
-	      }
-	      if (typeof arg === 'function') {
-	        var fnResult;
-	        try {
-	          fnResult = arg();
-	        } catch (err) {
-	          // ignore the error
-	          fnResult = '[function ' + arg.name + ' threw error!]';
-	        }
-	        return total + fnResult;
-	      }
-	      if (Array.isArray(arg)) {
-	        return total + JSON.stringify(arg);
-	      }
-	      if (isArrayLike(arg)) {
-	        return total + JSON.stringify(Array.prototype.slice.call(arg));
-	      }
-	      if (arg instanceof Error) {
-	        return total + arg.name + ' ' + arg.message;
-	      }
-	      var argString;
-	      try {
-	        argString = JSON.stringify(arg, null, 2);
-	      } catch (err) {
-	        argString = '[cannot stringify arg ' + k + ']';
-	      }
-	      return total + argString;
-	    }, '');
-	    return msg;
-	  }
-
-	  function lazyAssLogic(condition) {
-	    var fn = typeof condition === 'function' ? condition : null;
-
-	    if (fn) {
-	      condition = fn();
-	    }
-	    if (!condition) {
-	      var args = [].slice.call(arguments, 1);
-	      if (fn) {
-	        args.unshift(fn.toString());
-	      }
-	      return new Error(formMessage(args));
-	    }
-	  }
-
-	  var lazyAss = function lazyAss() {
-	    var err = lazyAssLogic.apply(null, arguments);
-	    if (err) {
-	      throw err;
-	    }
-	  };
-
-	  var lazyAssync = function lazyAssync() {
-	    var err = lazyAssLogic.apply(null, arguments);
-	    if (err) {
-	      setTimeout(function () {
-	        throw err;
-	      }, 0);
-	    }
-	  };
-
-	  function register(value, name) {
-	    if (typeof window === 'object') {
-	      /* global window */
-	      window[name] = value;
-	    } else if (typeof global === 'object') {
-	      global[name] = value;
-	    } else {
-	      throw new Error('Do not know how to register ' + name);
-	    }
-	  }
-
-	  register(lazyAss, 'lazyAss');
-	  register(lazyAss, 'la');
-	  register(lazyAssync, 'lazyAssync');
-	  register(lazyAssync, 'lac');
-
-	}());
-
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -12174,6 +12077,105 @@ return /******/ (function(modules) { // webpackBootstrap
 	}.call(this));
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)(module), (function() { return this; }())))
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {(function initLazyAss() {
+
+	  function isArrayLike(a) {
+	    return a && typeof a.length === 'number';
+	  }
+
+	  function formMessage(args) {
+	    var msg = args.reduce(function (total, arg, k) {
+	      if (k) {
+	        total += ' ';
+	      }
+	      if (typeof arg === 'string') {
+	        return total + arg;
+	      }
+	      if (typeof arg === 'function') {
+	        var fnResult;
+	        try {
+	          fnResult = arg();
+	        } catch (err) {
+	          // ignore the error
+	          fnResult = '[function ' + arg.name + ' threw error!]';
+	        }
+	        return total + fnResult;
+	      }
+	      if (Array.isArray(arg)) {
+	        return total + JSON.stringify(arg);
+	      }
+	      if (isArrayLike(arg)) {
+	        return total + JSON.stringify(Array.prototype.slice.call(arg));
+	      }
+	      if (arg instanceof Error) {
+	        return total + arg.name + ' ' + arg.message;
+	      }
+	      var argString;
+	      try {
+	        argString = JSON.stringify(arg, null, 2);
+	      } catch (err) {
+	        argString = '[cannot stringify arg ' + k + ']';
+	      }
+	      return total + argString;
+	    }, '');
+	    return msg;
+	  }
+
+	  function lazyAssLogic(condition) {
+	    var fn = typeof condition === 'function' ? condition : null;
+
+	    if (fn) {
+	      condition = fn();
+	    }
+	    if (!condition) {
+	      var args = [].slice.call(arguments, 1);
+	      if (fn) {
+	        args.unshift(fn.toString());
+	      }
+	      return new Error(formMessage(args));
+	    }
+	  }
+
+	  var lazyAss = function lazyAss() {
+	    var err = lazyAssLogic.apply(null, arguments);
+	    if (err) {
+	      throw err;
+	    }
+	  };
+
+	  var lazyAssync = function lazyAssync() {
+	    var err = lazyAssLogic.apply(null, arguments);
+	    if (err) {
+	      setTimeout(function () {
+	        throw err;
+	      }, 0);
+	    }
+	  };
+
+	  function register(value, name) {
+	    if (typeof window === 'object') {
+	      /* global window */
+	      window[name] = value;
+	    } else if (typeof global === 'object') {
+	      global[name] = value;
+	    } else {
+	      throw new Error('Do not know how to register ' + name);
+	    }
+	  }
+
+	  register(lazyAss, 'lazyAss');
+	  register(lazyAss, 'la');
+	  register(lazyAssync, 'lazyAssync');
+	  register(lazyAssync, 'lac');
+
+	}());
+
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 7 */
