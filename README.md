@@ -79,6 +79,20 @@ var result = k2.rankPartialMatches(['foo', 'bar'], items, 'bar');
 // result[2] is items[0] (nothing matches)
 ```
 
+### objectLens
+
+A function for building immutable object lenses. Construct the lens with a key
+and then use its getter, setter, or mapper.
+
+```js
+objectLens('name')({ name: 'joe' });
+// => 'joe'
+objectLens('age').set(20, { age: 19 });
+// => { age: 20 }
+objectLens('age').map(R.add(1), { age: 19 });
+// => { age: 20 }
+```
+
 ### Small print
 
 Author: Kensho &copy; 2015

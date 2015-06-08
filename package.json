@@ -55,7 +55,7 @@
     "ng-waffle": "0.2.2",
     "pre-git": "0.2.1",
     "quote": "0.4.0",
-    "ramda": "0.13.0",
+    "ramda": "0.14.0",
     "spy-on-lazy-ass": "0.0.1",
     "webpack": "1.7.3"
   },
