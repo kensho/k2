@@ -1,12 +1,15 @@
 {
   "name": "k2",
   "description": "Functional javascript utils",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "author": "Martin Camacho martin@kensho.com",
   "bugs": {
     "url": "https://github.com/kensho/k2/issues"
   },
-  "contributors": [],
+  "contributors": [
+    "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
+    "Matt Neary <neary@kensho.com>"
+  ],
   "devDependencies": {
     "babel-core": "4.7.16",
     "babel-loader": "4.2.0",
