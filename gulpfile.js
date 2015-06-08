@@ -101,11 +101,6 @@ gulp.task('webpack', function () {
         filename: 'k2.js',
         library: 'k2',
         libraryTarget: 'umd'
-      },
-      externals: {
-        'lodash': 'lodash',
-        'check-more-types': 'check-more-types',
-        'lazy-ass': 'lazy-ass'
       }
     }))
     // .pipe(concat(pkg.name + '.js'))
