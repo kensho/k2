@@ -7,9 +7,11 @@ function objectLens(key) {
   return R.lens(R.prop(key), function (val, obj) {
     var child = Object.create(obj);
     child.toJSON = function () {
-      var base = {};
+      var base;
       if (obj.toJSON) {
-        var base = obj.toJSON();
+        base = obj.toJSON();
+      } else {
+        base = R.pick(Object.keys(obj), obj);
       }
       base[key] = val;
       return base;
