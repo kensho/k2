@@ -31,5 +31,14 @@ describe('immutable objects', function () {
       objectLens('age').map(R.add(1)))(o);
     la(updated.name === 'matt' && updated.age === 21);
   });
+
+  it('stringifies all data', function () {
+    var o = {};
+    var updated = R.compose(
+      objectLens('name').set('matt'),
+      objectLens('age').set(19))(o);
+    var serialized = JSON.parse(JSON.stringify(updated));
+    la(serialized.name === 'matt', serialized, 'Name was not serialized');
+  });
 });
 
