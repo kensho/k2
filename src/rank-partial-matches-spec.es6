@@ -2,7 +2,7 @@
 require('lazy-ass');
 var check = require('check-more-types');
 var _ = require('lodash');
-var rankPartialMatches = require('./rank-partial-matches.es6');
+import rankPartialMatches from './rank-partial-matches.es6';
 
 describe('rankPartialMatches', function () {
   it('is a function', function () {

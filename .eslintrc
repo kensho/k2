@@ -1,7 +1,8 @@
 env:
     node: true
     browser: false
-
+ecmaFeatures:
+    modules: true
 rules:
     quotes: [2, 'single']
     indent: [2, 2]

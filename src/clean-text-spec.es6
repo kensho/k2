@@ -1,6 +1,9 @@
 /* global describe, it */
 require('lazy-ass');
-var clean = require('./clean-text.es6');
+var check = require('check-more-types');
+
+import clean from './clean-text.es6';
+la(check.fn(clean), 'missing clean function', clean);
 
 describe('cleanEnteredSearchText', function () {
 

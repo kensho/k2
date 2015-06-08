@@ -3,8 +3,9 @@ require('lazy-ass');
 var check = require('check-more-types');
 var _ = require('lodash');
 
+import findPartialMatches from './find-partial-matches.es6';
+
 describe('partial matching', function () {
-  var findPartialMatches = require('./find-partial-matches.es6');
 
   it('is a function', function () {
     la(check.fn(findPartialMatches));

@@ -1,7 +1,7 @@
 /* global describe, it */
 require('lazy-ass');
 var R = require('ramda');
-var objectLens = require('./immutable-objects.es6');
+import objectLens from './immutable-objects.es6';
 
 describe('immutable objects', function () {
   it('gets object value for key', function () {
