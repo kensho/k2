@@ -73,7 +73,7 @@
     "functional"
   ],
   "license": "MIT",
-  "main": "k2.js",
+  "main": "dist/k2.js",
   "pre-commit": [
     "npm test",
     "npm version"
@@ -84,6 +84,7 @@
   },
   "scripts": {
     "test": "gulp test; npm run test-under-node",
-    "test-under-node": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6"
+    "test-under-node": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6",
+    "load-from-node": "node dist/k2.js"
   }
 }

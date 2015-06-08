@@ -4,6 +4,7 @@ if (typeof k2 === 'undefined') {
 
 describe('k2', function () {
   it('exists', function () {
-    expect(k2).toBeDefined();
+    expect(k2).toBeDefined('k2 is defined');
+    expect(typeof k2).toEqual('object', 'it is an object');
   });
 });
