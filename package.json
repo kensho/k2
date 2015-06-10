@@ -87,6 +87,7 @@
   "scripts": {
     "test": "gulp test; npm run test-under-node; npm run load-from-node",
     "test-under-node": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6",
-    "load-from-node": "node dist/k2.js"
+    "load-from-node": "node dist/k2.js",
+    "watch": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6 --watch"
   }
 }
