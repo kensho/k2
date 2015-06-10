@@ -18,6 +18,8 @@ const isDay = (x) => {
 }
 
 const validYearMonthDay = (y, m, d) => {
+  la(check.number(y) && check.number(m) && check.number(d),
+    'invalid year or month or day', y, m, d);
   return isYear(y) &&
     isMonth(m) &&
     isDay(d);
@@ -29,50 +31,58 @@ const isFormat = (regex, str) => {
   return regex.test(str);
 };
 
-const isYYYYMMDD = (str) => {
-  const ymd = /^(\d\d\d\d)\-(\d\d)\-(\d\d)$/;
+const validIndices = check.schema.bind(null, {
+  year: check.number,
+  month: check.number,
+  day: check.number
+});
+
+const parseString = (regex, indices, str) => {
+  la(check.instance(regex, RegExp));
+  la(check.object(indices) && validIndices(indices),
+    'missing indices', indices);
+  la(check.string(str), 'missing date string', str);
   const initial = check.unemptyString(str) &&
-    isFormat(ymd, str);
+    isFormat(regex, str);
   if (!initial) {
-    return false;
+    return;
   }
-  const matches = ymd.exec(str);
-  const year = parseInt(matches[1]);
-  const month = parseInt(matches[2]);
-  const day = parseInt(matches[3]);
-  // console.log('year %d month %d day %d', year, month, day);
-  return validYearMonthDay(year, month, day);
+  const matches = regex.exec(str);
+  return {
+    year: parseInt(matches[indices.year]),
+    month: parseInt(matches[indices.month]),
+    day: parseInt(matches[indices.day])
+  };
 }
 
-const isYYYYDDMM = (str) => {
-  const ymd = /^(\d\d\d\d)\-(\d\d)\-(\d\d)$/;
-  const initial = check.unemptyString(str) &&
-    isFormat(ymd, str);
-  if (!initial) {
-    return false;
+const parseIfPossible = (regex, indices, str) => {
+  var date = parseString(regex, indices, str);
+  if (date) {
+    la(validIndices(date), 'missing date fields', date);
+    return validYearMonthDay(date.year, date.month, date.day);
   }
-  const matches = ymd.exec(str);
-  const year = parseInt(matches[1]);
-  const month = parseInt(matches[3]);
-  const day = parseInt(matches[2]);
-  // console.log('year %d month %d day %d', year, month, day);
-  return validYearMonthDay(year, month, day);
 }
 
-const isDDMMYYYY = (str) => {
-  const ymd = /^(\d\d)\-(\d\d)-(\d\d\d\d)$/;
-  const initial = check.unemptyString(str) &&
-    isFormat(ymd, str);
-  if (!initial) {
-    return false;
-  }
-  const matches = ymd.exec(str);
-  const year = parseInt(matches[3]);
-  const month = parseInt(matches[2]);
-  const day = parseInt(matches[1]);
-  // console.log('year %d month %d day %d', year, month, day);
-  return validYearMonthDay(year, month, day);
-}
+const isYYYYMMDD = parseIfPossible.bind(null,
+  /^(\d\d\d\d)\-(\d\d)\-(\d\d)$/, {
+    year: 1,
+    month: 2,
+    day: 3
+  });
+
+const isYYYYDDMM = parseIfPossible.bind(null,
+  /^(\d\d\d\d)\-(\d\d)\-(\d\d)$/, {
+    year: 1,
+    month: 3,
+    day: 2
+  });
+
+const isDDMMYYYY = parseIfPossible.bind(null,
+  /^(\d\d)\-(\d\d?)-(\d\d\d\d)$/, {
+    year: 3,
+    month: 2,
+    day: 1
+  });
 
 function guessDateFormat(strings) {
   if (check.string(strings)) {

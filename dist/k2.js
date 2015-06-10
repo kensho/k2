@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.4.3
+ * @version v0.5.0
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -70,11 +70,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var objectLens = _interopRequire(__webpack_require__(4));
 
+	var guessDateFormat = _interopRequire(__webpack_require__(5));
+
 	module.exports = {
 	  findPartialMatches: findPartialMatches,
 	  rankPartialMatches: rankPartialMatches,
 	  cleanEnteredText: cleanText,
-	  objectLens: objectLens
+	  objectLens: objectLens,
+	  guessDateFormat: guessDateFormat
 	};
 
 /***/ },
@@ -83,9 +86,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(5);
-	var check = __webpack_require__(7);
-	var _ = __webpack_require__(6);
+	__webpack_require__(6);
+	var check = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 
 	function findPartialMatchesSingleProperty(property, items, queryText) {
 	  la(check.unemptyString(property), "need property name", property);
@@ -136,9 +139,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(5);
-	var check = __webpack_require__(7);
-	var _ = __webpack_require__(6);
+	__webpack_require__(6);
+	var check = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 
 	// given objects that match query text, rank them, with better matches first
 	function rankPartialMatchesSingleProperty(property, matches, queryText) {
@@ -225,9 +228,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	module.exports = cleanEnteredSearchText;
-	__webpack_require__(5);
-	var check = __webpack_require__(7);
-	var _ = __webpack_require__(6);
+	__webpack_require__(6);
+	var check = __webpack_require__(8);
+	var _ = __webpack_require__(7);
 	function cleanEnteredSearchText(str) {
 	  la(check.string(str), "expected string to clean", str);
 	  str = str.toLowerCase();
@@ -243,7 +246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var R = __webpack_require__(8);
+	var R = __webpack_require__(9);
 
 	/**
 	Makes a lens for immutable object updates on the given key.
@@ -270,6 +273,109 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	__webpack_require__(6);
+	var check = __webpack_require__(8);
+
+	var isYear = function (x) {
+	  return check.number(x) && x > 0;
+	};
+
+	var isMonth = function (x) {
+	  return check.number(x) && x > 0 && x < 13;
+	};
+
+	var isDay = function (x) {
+	  return check.number(x) && x > 0 && x < 32;
+	};
+
+	var validYearMonthDay = function (y, m, d) {
+	  la(check.number(y) && check.number(m) && check.number(d), "invalid year or month or day", y, m, d);
+	  return isYear(y) && isMonth(m) && isDay(d);
+	};
+
+	var isFormat = function (regex, str) {
+	  la(check.instance(regex, RegExp), "expected regular expression", regex);
+	  la(check.string(str), "expected string", str);
+	  return regex.test(str);
+	};
+
+	var validIndices = check.schema.bind(null, {
+	  year: check.number,
+	  month: check.number,
+	  day: check.number
+	});
+
+	var parseString = function (regex, indices, str) {
+	  la(check.instance(regex, RegExp));
+	  la(check.object(indices) && validIndices(indices), "missing indices", indices);
+	  la(check.string(str), "missing date string", str);
+	  var initial = check.unemptyString(str) && isFormat(regex, str);
+	  if (!initial) {
+	    return;
+	  }
+	  var matches = regex.exec(str);
+	  return {
+	    year: parseInt(matches[indices.year]),
+	    month: parseInt(matches[indices.month]),
+	    day: parseInt(matches[indices.day])
+	  };
+	};
+
+	var parseIfPossible = function (regex, indices, str) {
+	  var date = parseString(regex, indices, str);
+	  if (date) {
+	    la(validIndices(date), "missing date fields", date);
+	    return validYearMonthDay(date.year, date.month, date.day);
+	  }
+	};
+
+	var isYYYYMMDD = parseIfPossible.bind(null, /^(\d\d\d\d)\-(\d\d)\-(\d\d)$/, {
+	  year: 1,
+	  month: 2,
+	  day: 3
+	});
+
+	var isYYYYDDMM = parseIfPossible.bind(null, /^(\d\d\d\d)\-(\d\d)\-(\d\d)$/, {
+	  year: 1,
+	  month: 3,
+	  day: 2
+	});
+
+	var isDDMMYYYY = parseIfPossible.bind(null, /^(\d\d)\-(\d\d?)-(\d\d\d\d)$/, {
+	  year: 3,
+	  month: 2,
+	  day: 1
+	});
+
+	function guessDateFormat(strings) {
+	  if (check.string(strings)) {
+	    strings = [strings];
+	  }
+	  var allYmd = strings.every(isYYYYMMDD);
+	  var allYdm = strings.every(isYYYYDDMM);
+	  var allDmy = strings.every(isDDMMYYYY);
+
+	  if (allYmd && !allYdm && !allDmy) {
+	    return "YYYY-MM-DD";
+	  }
+
+	  if (!allYmd && allYdm && !allDmy) {
+	    return "YYYY-DD-MM";
+	  }
+
+	  if (!allYmd && !allYdm && allDmy) {
+	    return "DD-MM-YYYY";
+	  }
+	}
+
+	module.exports = guessDateFormat;
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {(function initLazyAss() {
@@ -368,7 +474,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -12175,10 +12281,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)(module), (function() { return this; }())))
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {(function checkMoreTypes(check) {
@@ -12197,7 +12303,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (false) {
 	      throw new Error('Cannot find check-types library, has it been loaded?');
 	    }
-	    check = __webpack_require__(10);
+	    check = __webpack_require__(11);
 	  }
 
 	  /**
@@ -12700,7 +12806,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//  Ramda v0.14.0
@@ -20217,7 +20323,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(module) {
@@ -20233,7 +20339,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/**

@@ -47,4 +47,16 @@ describe('guess-date-format', function () {
     la(!result, result);
   });
 
+  it('detects single digit month', () => {
+    let str = '20-2-1980';
+    const result = guess(str);
+    la(result === 'DD-MM-YYYY', result);
+  });
+
+  it('cannot detect single digit day (ambiguous)', () => {
+    let str = '2-12-1980';
+    const result = guess(str);
+    la(!result, result);
+  });
+
 });
