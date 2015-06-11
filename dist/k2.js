@@ -86,9 +86,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(6);
-	var check = __webpack_require__(8);
-	var _ = __webpack_require__(7);
+	__webpack_require__(7);
+	var check = __webpack_require__(9);
+	var _ = __webpack_require__(8);
 
 	function findPartialMatchesSingleProperty(property, items, queryText) {
 	  la(check.unemptyString(property), "need property name", property);
@@ -139,9 +139,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(6);
-	var check = __webpack_require__(8);
-	var _ = __webpack_require__(7);
+	__webpack_require__(7);
+	var check = __webpack_require__(9);
+	var _ = __webpack_require__(8);
 
 	// given objects that match query text, rank them, with better matches first
 	function rankPartialMatchesSingleProperty(property, matches, queryText) {
@@ -228,9 +228,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	module.exports = cleanEnteredSearchText;
-	__webpack_require__(6);
-	var check = __webpack_require__(8);
-	var _ = __webpack_require__(7);
+	__webpack_require__(7);
+	var check = __webpack_require__(9);
+	var _ = __webpack_require__(8);
 	function cleanEnteredSearchText(str) {
 	  la(check.string(str), "expected string to clean", str);
 	  str = str.toLowerCase();
@@ -246,7 +246,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var R = __webpack_require__(9);
+	var R = __webpack_require__(10);
 
 	/**
 	Makes a lens for immutable object updates on the given key.
@@ -277,8 +277,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(6);
-	var check = __webpack_require__(8);
+	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+
+	__webpack_require__(7);
+	var check = __webpack_require__(9);
+
+	var xor = _interopRequire(__webpack_require__(6));
 
 	var isYear = function (x) {
 	  return check.number(x) && x > 0;
@@ -333,7 +337,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	};
 
-	var isYYYYMMDD = parseIfPossible.bind(null, /^(\d\d\d\d)\-(\d\d)\-(\d\d)$/, {
+	var isYYYYMMDD = parseIfPossible.bind(null, /^(\d\d\d\d)[\-|\/](\d\d)\-(\d\d)$/, {
 	  year: 1,
 	  month: 2,
 	  day: 3
@@ -345,11 +349,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  day: 2
 	});
 
-	var isDDMMYYYY = parseIfPossible.bind(null, /^(\d\d)\-(\d\d?)-(\d\d\d\d)$/, {
+	var isDDMMYYYY = parseIfPossible.bind(null, /^(\d\d)[-|\/](\d\d?)[-|\/](\d\d\d\d)$/, {
 	  year: 3,
 	  month: 2,
 	  day: 1
 	});
+
+	var isMMDDYYYY = parseIfPossible.bind(null, /^(\d\d)[-|\/](\d\d?)[-|\/](\d\d\d\d)$/, {
+	  day: 2,
+	  month: 1,
+	  year: 3 });
 
 	function guessDateFormat(strings) {
 	  if (check.string(strings)) {
@@ -358,17 +367,27 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var allYmd = strings.every(isYYYYMMDD);
 	  var allYdm = strings.every(isYYYYDDMM);
 	  var allDmy = strings.every(isDDMMYYYY);
+	  var allMdy = strings.every(isMMDDYYYY);
 
-	  if (allYmd && !allYdm && !allDmy) {
+	  if (!xor(allYmd, allYdm, allDmy, allMdy)) {
+	    // ambiguous date - several formats matched
+	    return;
+	  }
+
+	  if (allYmd) {
 	    return "YYYY-MM-DD";
 	  }
 
-	  if (!allYmd && allYdm && !allDmy) {
+	  if (allYdm) {
 	    return "YYYY-DD-MM";
 	  }
 
-	  if (!allYmd && !allYdm && allDmy) {
+	  if (allDmy) {
 	    return "DD-MM-YYYY";
+	  }
+
+	  if (allMdy) {
+	    return "MM-DD-YYYY";
 	  }
 	}
 
@@ -376,6 +395,42 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/*
+	  Returns true only if for the given list of predicates,
+	  only single one is true, and the rest are false.
+
+	  onlyTrue(true, false, false); // true
+	  onlyTrue(false, false, false); // false
+	  onlyTrue(false, true, true); // false
+	  onlyTrue(false, false, true); // true
+	*/
+	"use strict";
+
+	function onlyTrue() {
+	  var predicates = Array.prototype.slice.call(arguments, 0);
+	  if (!predicates.length) {
+	    return false;
+	  }
+	  var count = 0,
+	      k;
+	  for (k = 0; k < predicates.length; k += 1) {
+	    if (predicates[k]) {
+	      count += 1;
+	      if (count > 1) {
+	        return false;
+	      }
+	    }
+	  }
+
+	  return count === 1;
+	}
+
+	module.exports = onlyTrue;
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {(function initLazyAss() {
@@ -474,7 +529,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -12281,10 +12336,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)(module), (function() { return this; }())))
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {(function checkMoreTypes(check) {
@@ -12303,7 +12358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (false) {
 	      throw new Error('Cannot find check-types library, has it been loaded?');
 	    }
-	    check = __webpack_require__(11);
+	    check = __webpack_require__(12);
 	  }
 
 	  /**
@@ -12806,7 +12861,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//  Ramda v0.14.0
@@ -20323,7 +20378,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function(module) {
@@ -20339,7 +20394,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/**

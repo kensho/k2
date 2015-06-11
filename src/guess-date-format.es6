@@ -1,5 +1,6 @@
 require('lazy-ass');
 const check = require('check-more-types');
+import xor from './only-true.es6';
 
 const isYear = (x) => {
   return check.number(x) &&
@@ -64,7 +65,7 @@ const parseIfPossible = (regex, indices, str) => {
 }
 
 const isYYYYMMDD = parseIfPossible.bind(null,
-  /^(\d\d\d\d)\-(\d\d)\-(\d\d)$/, {
+  /^(\d\d\d\d)[\-|\/](\d\d)\-(\d\d)$/, {
     year: 1,
     month: 2,
     day: 3
@@ -78,10 +79,17 @@ const isYYYYDDMM = parseIfPossible.bind(null,
   });
 
 const isDDMMYYYY = parseIfPossible.bind(null,
-  /^(\d\d)\-(\d\d?)-(\d\d\d\d)$/, {
+  /^(\d\d)[-|\/](\d\d?)[-|\/](\d\d\d\d)$/, {
     year: 3,
     month: 2,
     day: 1
+  });
+
+const isMMDDYYYY = parseIfPossible.bind(null,
+  /^(\d\d)[-|\/](\d\d?)[-|\/](\d\d\d\d)$/, {
+    day: 2,
+    month: 1,
+    year: 3,
   });
 
 function guessDateFormat(strings) {
@@ -91,17 +99,27 @@ function guessDateFormat(strings) {
   var allYmd = strings.every(isYYYYMMDD);
   var allYdm = strings.every(isYYYYDDMM);
   var allDmy = strings.every(isDDMMYYYY);
+  var allMdy = strings.every(isMMDDYYYY);
 
-  if (allYmd && !allYdm && !allDmy) {
+  if (!xor(allYmd, allYdm, allDmy, allMdy)) {
+    // ambiguous date - several formats matched
+    return;
+  }
+
+  if (allYmd) {
     return 'YYYY-MM-DD';
   }
 
-  if (!allYmd && allYdm && !allDmy) {
+  if (allYdm) {
     return 'YYYY-DD-MM';
   }
 
-  if (!allYmd && !allYdm && allDmy) {
+  if (allDmy) {
     return 'DD-MM-YYYY';
+  }
+
+  if (allMdy) {
+    return 'MM-DD-YYYY';
   }
 }
 
