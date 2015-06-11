@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.6.0
+ * @version v0.6.1
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -363,27 +363,38 @@ return /******/ (function(modules) { // webpackBootstrap
 	  month: 1,
 	  year: 3 });
 
-	function guessDateFormat(strings) {
-	  if (check.string(strings)) {
-	    strings = [strings];
-	  }
-
-	  var formats = {
-	    "YYYY-MM-DD": isYYYYMMDD,
-	    "YYYY-DD-MM": isYYYYDDMM,
-	    "DD-MM-YYYY": isDDMMYYYY,
-	    "MM-DD-YYYY": isMMDDYYYY
+	function lift(fn) {
+	  return function lifted(arr) {
+	    return Array.isArray(arr) ? arr.every(fn) : fn(arr);
 	  };
+	}
 
+	var formats = {
+	  "YYYY-MM-DD": lift(isYYYYMMDD),
+	  "YYYY-DD-MM": lift(isYYYYDDMM),
+	  "DD-MM-YYYY": lift(isDDMMYYYY),
+	  "MM-DD-YYYY": lift(isMMDDYYYY)
+	};
+
+	function findMatchedFormats(strings) {
 	  var matchedFormats = [];
 	  Object.keys(formats).forEach(function (format) {
 	    var formatCheck = formats[format];
 	    la(check.fn(formatCheck), "expected check function", format, formatCheck);
-	    // TODO use lift
-	    if (strings.every(formatCheck)) {
+	    if (formatCheck(strings)) {
 	      matchedFormats.push(format);
 	    }
 	  });
+	  return matchedFormats;
+	}
+
+	function guessDateFormat(strings) {
+	  if (!arguments.length) {
+	    return;
+	  }
+
+	  var matchedFormats = findMatchedFormats(strings);
+	  la(check.array(matchedFormats), "expected array result", matchedFormats, strings);
 
 	  if (matchedFormats.length !== 1) {
 	    // no matches or ambiguous dates
