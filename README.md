@@ -102,6 +102,26 @@ setter({ name: 'joe', age: 19 })
 // => { name: 'matt', age: 20 }
 ```
 
+### onlyTrue
+
+XOR for predicates - returns true if and only if a single value is truthy.
+
+```js
+onlyTrue(true, false, false); // true
+onlyTrue(false, false, false); // false
+onlyTrue(false, true, true); // false
+onlyTrue(false, false, true); // true
+```
+
+### guessDateFormat
+
+Tries to determine date format from single or list of strings. If there is ambiguity returns undefined.
+
+```js
+guessDateFormat('2010-15-10'); // 'YYYY-DD-MM'
+guessDateFormat(['05/19/2000', '22/01/2002']); // undefined
+```
+
 ### Small print
 
 Author: Kensho &copy; 2015

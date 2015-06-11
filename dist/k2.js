@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.5.0
+ * @version v0.6.0
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -72,12 +72,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var guessDateFormat = _interopRequire(__webpack_require__(5));
 
+	var onlyTrue = _interopRequire(__webpack_require__(6));
+
 	module.exports = {
 	  findPartialMatches: findPartialMatches,
 	  rankPartialMatches: rankPartialMatches,
 	  cleanEnteredText: cleanText,
 	  objectLens: objectLens,
-	  guessDateFormat: guessDateFormat
+	  guessDateFormat: guessDateFormat,
+	  onlyTrue: onlyTrue
 	};
 
 /***/ },
@@ -364,31 +367,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (check.string(strings)) {
 	    strings = [strings];
 	  }
-	  var allYmd = strings.every(isYYYYMMDD);
-	  var allYdm = strings.every(isYYYYDDMM);
-	  var allDmy = strings.every(isDDMMYYYY);
-	  var allMdy = strings.every(isMMDDYYYY);
 
-	  if (!xor(allYmd, allYdm, allDmy, allMdy)) {
-	    // ambiguous date - several formats matched
+	  var formats = {
+	    "YYYY-MM-DD": isYYYYMMDD,
+	    "YYYY-DD-MM": isYYYYDDMM,
+	    "DD-MM-YYYY": isDDMMYYYY,
+	    "MM-DD-YYYY": isMMDDYYYY
+	  };
+
+	  var matchedFormats = [];
+	  Object.keys(formats).forEach(function (format) {
+	    var formatCheck = formats[format];
+	    la(check.fn(formatCheck), "expected check function", format, formatCheck);
+	    // TODO use lift
+	    if (strings.every(formatCheck)) {
+	      matchedFormats.push(format);
+	    }
+	  });
+
+	  if (matchedFormats.length !== 1) {
+	    // no matches or ambiguous dates
 	    return;
 	  }
 
-	  if (allYmd) {
-	    return "YYYY-MM-DD";
-	  }
-
-	  if (allYdm) {
-	    return "YYYY-DD-MM";
-	  }
-
-	  if (allDmy) {
-	    return "DD-MM-YYYY";
-	  }
-
-	  if (allMdy) {
-	    return "MM-DD-YYYY";
-	  }
+	  return matchedFormats[0];
 	}
 
 	module.exports = guessDateFormat;
