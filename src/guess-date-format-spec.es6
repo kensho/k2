@@ -104,4 +104,10 @@ describe('guess-date-format', function () {
     la(result === 'MM-DD-YYYY');
   });
 
+  it('another example of ambiguous dates', () => {
+    const strings = ['22/01/2003', '10/03/2001'];
+    const result = guess(strings);
+    la(result === 'DD-MM-YYYY');
+  });
+
 });
