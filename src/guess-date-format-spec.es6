@@ -98,4 +98,10 @@ describe('guess-date-format', function () {
     la(result === 'MM-DD-YYYY', strings, result);
   });
 
+  it('handles short 1 digit month', () => {
+    const strings = ['05/29/2014', '06/5/2014', '06/12/2014', '06/19/2014'];
+    const result = guess(strings);
+    la(result === 'MM-DD-YYYY');
+  });
+
 });
