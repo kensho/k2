@@ -24,6 +24,26 @@ var k2 = require('k2');
 
 ## Api
 
+### presentProperties
+
+Determines if each property in the list is present in each object given in the second list
+
+```js
+var bad = [{
+  name: 'foo',
+  age: 1
+}, {
+  name: 'bar'
+}, {
+  name: 'baz'
+}];
+presentProperties(['name', 'age'], bad);
+// ['name']
+```
+
+`presentProperties` is curried, works with deep properties, requires `lodash` version
+with deep property support, see [_.has](https://lodash.com/docs#has)
+
 ### cleanEnteredText
 
 Removes HTML entities from user-entered text. Common entities introduced by a textarea element

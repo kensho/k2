@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.7.0
+ * @version v0.8.0
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -11,7 +11,7 @@
 		exports["k2"] = factory(require("_"));
 	else
 		root["k2"] = factory(root["_"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_7__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_8__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -74,13 +74,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var onlyTrue = _interopRequire(__webpack_require__(6));
 
+	var presentProperties = _interopRequire(__webpack_require__(7));
+
 	module.exports = {
 	  findPartialMatches: findPartialMatches,
 	  rankPartialMatches: rankPartialMatches,
 	  cleanEnteredText: cleanText,
 	  objectLens: objectLens,
 	  guessDateFormat: guessDateFormat,
-	  onlyTrue: onlyTrue
+	  onlyTrue: onlyTrue,
+	  presentProperties: presentProperties
 	};
 
 /***/ },
@@ -89,9 +92,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(8);
-	var check = __webpack_require__(9);
-	var _ = __webpack_require__(7);
+	__webpack_require__(9);
+	var check = __webpack_require__(10);
+	var _ = __webpack_require__(8);
 
 	function findPartialMatchesSingleProperty(property, items, queryText) {
 	  la(check.unemptyString(property), "need property name", property);
@@ -142,9 +145,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	__webpack_require__(8);
-	var check = __webpack_require__(9);
-	var _ = __webpack_require__(7);
+	__webpack_require__(9);
+	var check = __webpack_require__(10);
+	var _ = __webpack_require__(8);
 
 	// given objects that match query text, rank them, with better matches first
 	function rankPartialMatchesSingleProperty(property, matches, queryText) {
@@ -231,9 +234,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	"use strict";
 
 	module.exports = cleanEnteredSearchText;
-	__webpack_require__(8);
-	var check = __webpack_require__(9);
-	var _ = __webpack_require__(7);
+	__webpack_require__(9);
+	var check = __webpack_require__(10);
+	var _ = __webpack_require__(8);
 	function cleanEnteredSearchText(str) {
 	  la(check.string(str), "expected string to clean", str);
 	  str = str.toLowerCase();
@@ -249,7 +252,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var R = __webpack_require__(10);
+	var R = __webpack_require__(11);
 
 	/**
 	Makes a lens for immutable object updates on the given key.
@@ -282,8 +285,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
 
-	__webpack_require__(8);
-	var check = __webpack_require__(9);
+	__webpack_require__(9);
+	var check = __webpack_require__(10);
 
 	var xor = _interopRequire(__webpack_require__(6));
 
@@ -446,10 +449,34 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_7__;
+	"use strict";
+
+	__webpack_require__(9);
+	var check = __webpack_require__(10);
+	var _ = __webpack_require__(8);
+	la(check.fn(_.has), "missing lodash.has method, version upgrade?", _.VERSION);
+
+	function presentProperties(testProperties, list) {
+	  la(check.arrayOf(check.unemptyString, testProperties), "missing test properties", testProperties);
+	  la(check.array(list), "missing list of objects", list);
+
+	  return testProperties.filter(function (key) {
+	    return list.every(function (object) {
+	      return _.has(object, key);
+	    });
+	  });
+	}
+
+	module.exports = _.curry(presentProperties);
 
 /***/ },
 /* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_8__;
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {(function initLazyAss() {
@@ -548,7 +575,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {(function checkMoreTypes(check) {
@@ -567,7 +594,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    if (false) {
 	      throw new Error('Cannot find check-types library, has it been loaded?');
 	    }
-	    check = __webpack_require__(11);
+	    check = __webpack_require__(12);
 	  }
 
 	  /**
@@ -1070,7 +1097,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//  Ramda v0.14.0
@@ -8587,7 +8614,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/**

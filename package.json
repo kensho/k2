@@ -1,7 +1,7 @@
 {
   "name": "k2",
   "description": "Functional javascript utils",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "author": "Martin Camacho martin@kensho.com",
   "bugs": {
     "url": "https://github.com/kensho/k2/issues"
@@ -14,7 +14,7 @@
     "check-more-types": "1.5.0",
     "check-types": "1.4.0",
     "lazy-ass": "0.5.3",
-    "lodash": "3.6.0",
+    "lodash": "3.10.0",
     "ramda": "0.14.0"
   },
   "devDependencies": {
@@ -86,7 +86,8 @@
   },
   "scripts": {
     "test": "gulp test; npm run test-under-node; npm run load-from-node",
-    "test-under-node": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6",
+    "test-under-node": "npm run mocha",
+    "mocha": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6",
     "load-from-node": "node dist/k2.js",
     "watch": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6 --watch"
   }
