@@ -10,6 +10,18 @@
 [k2-icon]: https://nodei.co/npm/k2.png?downloads=true
 [k2-url]: https://npmjs.org/package/k2
 
+## Install
+
+    npm install --save k2
+
+In the browser, if you already have global [lodash](https://lodash.com/docs) library, you can
+include `dist/k2-browser.js`. Under Node, or to use lodash included in the k2 bundle, use `dist/k2.js`.
+
+```js
+// node
+var k2 = require('k2');
+```
+
 ## Api
 
 ### cleanEnteredText

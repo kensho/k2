@@ -103,13 +103,38 @@ gulp.task('webpack', function () {
         libraryTarget: 'umd'
       }
     }))
-    // .pipe(concat(pkg.name + '.js'))
     .pipe(header(banner, { pkg: pkg }))
     .pipe(gulp.dest(dest))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
     .pipe(gulp.dest(dest))
-    .pipe(notify({ message: 'webpack task complete' }));
+    .pipe(notify({ message: 'webpack task complete, includes lodash' }));
+});
+
+gulp.task('webpack-browser', function () {
+  return gulp.src('')
+    .pipe(webpack({
+      entry: './src/k2.es6',
+      module: {
+        loaders: [
+          { test: /\.es6$/, exclude: /node_modules/, loader: 'babel-loader' }
+        ]
+      },
+      externals: {
+        lodash: '_'
+      },
+      output: {
+        filename: 'k2-browser.js',
+        library: 'k2',
+        libraryTarget: 'umd'
+      }
+    }))
+    .pipe(header(banner, { pkg: pkg }))
+    .pipe(gulp.dest(dest))
+    .pipe(rename({suffix: '.min'}))
+    .pipe(uglify())
+    .pipe(gulp.dest(dest))
+    .pipe(notify({ message: 'webpack (without lodash) browser task complete' }));
 });
 
 gulp.task('mocha', function () {
@@ -139,5 +164,5 @@ gulp.task('watch', function() {
 gulp.task('lint', ['lint:src', 'lint:specs', 'lint:gulpfile']);
 
 gulp.task('default', ['deps-ok', 'grunt-nice-package', 'clean'], function () {
-  gulp.start('lint', 'webpack');
+  gulp.start('lint', 'webpack', 'webpack-browser');
 });
