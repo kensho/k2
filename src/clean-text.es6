@@ -14,7 +14,7 @@ export function cleanEnteredSearchText(str) {
   return str;
 }
 
-var HTML_TAG_REPLACE_REGEX = /<\/?[a-zA-Z-0-9\ \(\);,:"'%=&\.\$\^\[\]]*>/g;
+var HTML_TAG_REPLACE_REGEX = /<\/?[a-zA-Z-0-9\ \(\);,:"'%=&\.\$\^\[\]#]*>/g;
 
 // cleans html tags out of a string
 export function cleanHtmlTags(str, replaceWith) {

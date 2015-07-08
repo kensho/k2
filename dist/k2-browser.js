@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.9.0
+ * @version v0.9.1
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -261,7 +261,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return str;
 	}
 
-	var HTML_TAG_REPLACE_REGEX = /<\/?[a-zA-Z-0-9\ \(\);,:"'%=&\.\$\^\[\]]*>/g;
+	var HTML_TAG_REPLACE_REGEX = /<\/?[a-zA-Z-0-9\ \(\);,:"'%=&\.\$\^\[\]#]*>/g;
 	function cleanHtmlTags(str, replaceWith) {
 	  la(check.string(str), "expected string", str);
 	  replaceWith = replaceWith || "";

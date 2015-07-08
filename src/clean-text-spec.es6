@@ -143,6 +143,33 @@ describe('cleanTickerSearchHtml', function () {
     la(clean('<td data-sheets-value="[null,2,&quot;$GOOG&quot;]">$RR</td>') === '$RR ');
   });
 
+  it('cleans pasted styled cells 1', function () {
+    var text = '<td style="padding:2px 3px 2px 3px;" ' +
+      'data-sheets-value="[null,2,"goog"]">goog';
+    var cleaned = clean(text);
+    la(cleaned === 'goog', cleaned);
+  });
+
+  it('cleans pasted styled cells 2', function () {
+    var text = '<td style="padding:2px 3px 2px 3px;vertical-align:bottom;" ' +
+      'data-sheets-value="[null,2,"goog"]">goog';
+    var cleaned = clean(text);
+    la(cleaned === 'goog', cleaned);
+  });
+
+  it('cleans pasted styled cells 3', function () {
+    var text = '<td style="padding:2px 3px 2px 3px;vertical-align:bottom;background-color:#ea9999;" ' +
+      'data-sheets-value="[null,2,"goog"]">goog';
+    var cleaned = clean(text);
+    la(cleaned === 'goog', cleaned);
+  });
+
+  it('cleans pasted styled cells with color', function () {
+    var text = '<td style="background-color:#ea9999;" >goog';
+    var cleaned = clean(text);
+    la(cleaned === 'goog', cleaned);
+  });
+
   it('removes data tag with .', function () {
     la(clean('<td something="[.something]">$CL</td>') === '$CL ');
   });
