@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.8.0
+ * @version v0.9.0
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -66,7 +66,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var rankPartialMatches = _interopRequire(__webpack_require__(2));
 
-	var cleanText = _interopRequire(__webpack_require__(3));
+	var _cleanTextEs6 = __webpack_require__(3);
+
+	var cleanEnteredSearchText = _cleanTextEs6.cleanEnteredSearchText;
+	var cleanHtmlTags = _cleanTextEs6.cleanHtmlTags;
+	var cleanTickerSearchHtml = _cleanTextEs6.cleanTickerSearchHtml;
 
 	var objectLens = _interopRequire(__webpack_require__(4));
 
@@ -79,11 +83,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = {
 	  findPartialMatches: findPartialMatches,
 	  rankPartialMatches: rankPartialMatches,
-	  cleanEnteredText: cleanText,
 	  objectLens: objectLens,
 	  guessDateFormat: guessDateFormat,
 	  onlyTrue: onlyTrue,
-	  presentProperties: presentProperties
+	  presentProperties: presentProperties,
+	  cleanEnteredText: cleanEnteredSearchText,
+	  cleanHtmlTags: cleanHtmlTags,
+	  cleanTickerSearchHtml: cleanTickerSearchHtml
 	};
 
 /***/ },
@@ -94,7 +100,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	__webpack_require__(8);
 	var check = __webpack_require__(10);
-	var _ = __webpack_require__(9);
 
 	function findPartialMatchesSingleProperty(property, items, queryText) {
 	  la(check.unemptyString(property), "need property name", property);
@@ -233,7 +238,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	@method cleanEnteredSearchText */
 	"use strict";
 
-	module.exports = cleanEnteredSearchText;
+	exports.cleanEnteredSearchText = cleanEnteredSearchText;
+
+	// cleans html tags out of a string
+	exports.cleanHtmlTags = cleanHtmlTags;
+
+	// cleans whatever user pasted into the HTML ticker search box
+	// NOTE: does not trim spaces
+	exports.cleanTickerSearchHtml = cleanTickerSearchHtml;
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	__webpack_require__(8);
 	var check = __webpack_require__(10);
 	var _ = __webpack_require__(9);
@@ -244,6 +259,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  str = str.trim();
 	  str = _.unescape(str);
 	  return str;
+	}
+
+	var HTML_TAG_REPLACE_REGEX = /<\/?[a-zA-Z-0-9\ \(\);,:"'%=&\.\$\^\[\]]*>/g;
+	function cleanHtmlTags(str, replaceWith) {
+	  la(check.string(str), "expected string", str);
+	  replaceWith = replaceWith || "";
+	  return str.replace(HTML_TAG_REPLACE_REGEX, replaceWith);
+	}
+
+	function cleanTickerSearchHtml(html) {
+	  la(check.string(html), "expected string", html);
+	  html = html.replace(HTML_TAG_REPLACE_REGEX, "\n");
+
+	  var NON_BREAKING_REGEX = /&nbsp;/g;
+	  html = html.replace(NON_BREAKING_REGEX, " ");
+
+	  var AMPERSAND_REGEX = /&amp;/g;
+	  html = html.replace(AMPERSAND_REGEX, "&");
+
+	  // replace single no break symbol with space
+	  html = html.replace(/\s$/, " ");
+	  html = html.replace(/^\s*/, "");
+	  html = html.replace(/\n+/, "\n");
+	  return html;
 	}
 
 /***/ },
@@ -283,35 +322,31 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
-
 	__webpack_require__(8);
 	var check = __webpack_require__(10);
 
-	var xor = _interopRequire(__webpack_require__(6));
-
-	var isYear = function (x) {
+	function isYear(x) {
 	  return check.number(x) && x > 0;
-	};
+	}
 
-	var isMonth = function (x) {
+	function isMonth(x) {
 	  return check.number(x) && x > 0 && x < 13;
-	};
+	}
 
-	var isDay = function (x) {
+	function isDay(x) {
 	  return check.number(x) && x > 0 && x < 32;
-	};
+	}
 
-	var validYearMonthDay = function (y, m, d) {
+	function validYearMonthDay(y, m, d) {
 	  la(check.number(y) && check.number(m) && check.number(d), "invalid year or month or day", y, m, d);
 	  return isYear(y) && isMonth(m) && isDay(d);
-	};
+	}
 
-	var isFormat = function (regex, str) {
+	function isFormat(regex, str) {
 	  la(check.instance(regex, RegExp), "expected regular expression", regex);
 	  la(check.string(str), "expected string", str);
 	  return regex.test(str);
-	};
+	}
 
 	var validIndices = check.schema.bind(null, {
 	  year: check.number,
@@ -319,29 +354,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  day: check.number
 	});
 
-	var parseString = function (regex, indices, str) {
+	function parseString(regex, indices, str) {
 	  la(check.instance(regex, RegExp));
 	  la(check.object(indices) && validIndices(indices), "missing indices", indices);
 	  la(check.string(str), "missing date string", str);
 	  var initial = check.unemptyString(str) && isFormat(regex, str);
 	  if (!initial) {
+	    /* eslint consistent-return:0 */
 	    return;
 	  }
 	  var matches = regex.exec(str);
 	  return {
-	    year: parseInt(matches[indices.year]),
-	    month: parseInt(matches[indices.month]),
-	    day: parseInt(matches[indices.day])
+	    year: parseInt(matches[indices.year], 10),
+	    month: parseInt(matches[indices.month], 10),
+	    day: parseInt(matches[indices.day], 10)
 	  };
-	};
+	}
 
-	var parseIfPossible = function (regex, indices, str) {
+	function parseIfPossible(regex, indices, str) {
 	  var date = parseString(regex, indices, str);
 	  if (date) {
 	    la(validIndices(date), "missing date fields", date);
 	    return validYearMonthDay(date.year, date.month, date.day);
 	  }
-	};
+	}
 
 	var isYYYYMMDD = parseIfPossible.bind(null, /^(\d\d\d\d)[\-|\/](\d\d)\-(\d\d)$/, {
 	  year: 1,
@@ -364,7 +400,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var isMMDDYYYY = parseIfPossible.bind(null, /^(\d\d)[-|\/](\d\d?)[-|\/](\d\d\d\d)$/, {
 	  day: 2,
 	  month: 1,
-	  year: 3 });
+	  year: 3
+	});
 
 	function lift(fn) {
 	  return function lifted(arr) {

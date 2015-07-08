@@ -1,24 +1,23 @@
 require('lazy-ass');
 const check = require('check-more-types');
-import xor from './only-true.es6';
 
-const isYear = (x) => {
+function isYear(x) {
   return check.number(x) &&
     x > 0;
 }
 
-const isMonth = (x) => {
+function isMonth(x) {
   return check.number(x) &&
     x > 0 && x < 13;
 }
 
-const isDay = (x) => {
+function isDay(x) {
   return check.number(x) &&
     x > 0 &&
     x < 32;
 }
 
-const validYearMonthDay = (y, m, d) => {
+function validYearMonthDay(y, m, d) {
   la(check.number(y) && check.number(m) && check.number(d),
     'invalid year or month or day', y, m, d);
   return isYear(y) &&
@@ -26,11 +25,11 @@ const validYearMonthDay = (y, m, d) => {
     isDay(d);
 }
 
-const isFormat = (regex, str) => {
+function isFormat(regex, str) {
   la(check.instance(regex, RegExp), 'expected regular expression', regex);
   la(check.string(str), 'expected string', str);
   return regex.test(str);
-};
+}
 
 const validIndices = check.schema.bind(null, {
   year: check.number,
@@ -38,7 +37,7 @@ const validIndices = check.schema.bind(null, {
   day: check.number
 });
 
-const parseString = (regex, indices, str) => {
+function parseString(regex, indices, str) {
   la(check.instance(regex, RegExp));
   la(check.object(indices) && validIndices(indices),
     'missing indices', indices);
@@ -46,17 +45,18 @@ const parseString = (regex, indices, str) => {
   const initial = check.unemptyString(str) &&
     isFormat(regex, str);
   if (!initial) {
+    /* eslint consistent-return:0 */
     return;
   }
   const matches = regex.exec(str);
   return {
-    year: parseInt(matches[indices.year]),
-    month: parseInt(matches[indices.month]),
-    day: parseInt(matches[indices.day])
+    year: parseInt(matches[indices.year], 10),
+    month: parseInt(matches[indices.month], 10),
+    day: parseInt(matches[indices.day], 10)
   };
 }
 
-const parseIfPossible = (regex, indices, str) => {
+function parseIfPossible(regex, indices, str) {
   var date = parseString(regex, indices, str);
   if (date) {
     la(validIndices(date), 'missing date fields', date);
@@ -89,7 +89,7 @@ const isMMDDYYYY = parseIfPossible.bind(null,
   /^(\d\d)[-|\/](\d\d?)[-|\/](\d\d\d\d)$/, {
     day: 2,
     month: 1,
-    year: 3,
+    year: 3
   });
 
 function lift(fn) {

@@ -1,7 +1,7 @@
 {
   "name": "k2",
   "description": "Functional javascript utils",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "author": "Martin Camacho martin@kensho.com",
   "bugs": {
     "url": "https://github.com/kensho/k2/issues"
@@ -60,7 +60,7 @@
     "modernizr": "3.0.0-alpha.3",
     "ng-describe": "0.10.1",
     "ng-waffle": "0.2.2",
-    "pre-git": "0.2.1",
+    "pre-git": "0.6.1",
     "quote": "0.4.0",
     "spy-on-lazy-ass": "0.0.1",
     "webpack": "1.7.3"
@@ -76,9 +76,9 @@
   ],
   "license": "MIT",
   "main": "dist/k2.js",
+  "post-commit": "npm version",
   "pre-commit": [
-    "npm test",
-    "npm version"
+    "npm test"
   ],
   "repository": {
     "type": "git",

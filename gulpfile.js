@@ -7,7 +7,7 @@ var log = require('debug-logdown')('gulp');
 var bold = require('quote')({ quotes: '*' });
 log.info('node', bold(process.version));
 
-require('babel-core/register');
+var babel = require('babel-core/register');
 
 var gulp = require('gulp'),
   eslint = require('gulp-eslint'),
@@ -36,17 +36,22 @@ var isVerbose = process.argv.some(function (arg) {
 
 require('gulp-grunt')(gulp, { verbose: isVerbose });
 
-var src = glob.sync('src/**/*.js', 'src/**/*.es6');
-log.log('all source files:\n' + src.join('\n  '));
+var allSources = glob.sync('src/*.{es6,js}');
+log.log('all source files:\n' + allSources.join('\n  '));
 
 // need to skip specs
 function isSpecFile(filename) {
-  return !/-spec\./.test(filename);
+  return /-spec\./.test(filename);
 }
-src = src.filter(isSpecFile);
+var src = allSources.filter(function (filename) {
+  return !isSpecFile(filename);
+});
 log.log('just source files:\n' + src.join('\n  '));
 
-var specs = ['src/**/*-spec.js', 'src/**/*-spec.es6'];
+var specs = allSources.filter(isSpecFile);
+log.log('spec files');
+log.log(specs);
+
 var dest = './dist';
 
 gulp.task('deps-ok', function () {
@@ -144,6 +149,9 @@ gulp.task('mocha', function () {
 
   return gulp.src(specs, {read: false})
     .pipe(mocha({
+      compilers: {
+        js: babel
+      },
       reporter: reporter,
       ui: 'bdd',
       reporterOptions: {

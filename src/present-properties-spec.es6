@@ -5,7 +5,7 @@ var _ = require('lodash');
 
 import presentProperties from './present-properties.es6';
 
-describe.only('presentProperties', () => {
+describe('presentProperties', () => {
   it('is a function', () => {
     la(check.fn(presentProperties));
   });

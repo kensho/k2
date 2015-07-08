@@ -59,6 +59,8 @@ k2.cleanEnteredText('FOO&nbsp;b') // 'foo b'
 k2.cleanEnteredText('foo&nbsp;') // 'foo'
 ```
 
+In addition to `cleanEnteredText`, there is also `cleanHtmlTags` and `cleanTickerSearchHtml`
+
 ### findPartialMatches
 
 Finds all items where given properties are matching the given query text.
