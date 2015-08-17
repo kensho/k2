@@ -156,6 +156,16 @@ guessDateFormat('2010-15-10'); // 'YYYY-DD-MM'
 guessDateFormat(['05/19/2000', '22/01/2002']); // undefined
 ```
 
+### fanout
+
+Apply a collection of functions to the same input and collect their results in
+a list.
+
+```js
+fanout(prop(0), prop(1))(['a', 'b']) == ['a', 'b']
+fanout(length)(['a', 'b']) == [2]
+```
+
 ### Small print
 
 Author: Kensho &copy; 2015

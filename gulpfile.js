@@ -93,6 +93,14 @@ gulp.task('lint:gulpfile', function () {
     .pipe(eslint.failOnError());
 });
 
+var webpackPlugins = (function () {
+  // Include webpack -- rather than gulp-webpack -- but avoid making it global
+  // since that will lead to confusion. Additionally, avoid inlining it since
+  // that would confuse the `new` syntax.
+  var pack = require('webpack');
+  return [new pack.BannerPlugin('@gener' + 'ated' + ' @no' + 'lint')];
+}());
+
 gulp.task('webpack', function () {
   return gulp.src('')
     .pipe(webpack({
@@ -102,6 +110,7 @@ gulp.task('webpack', function () {
           { test: /\.es6$/, exclude: /node_modules/, loader: 'babel-loader' }
         ]
       },
+      plugins: webpackPlugins,
       output: {
         filename: 'k2.js',
         library: 'k2',
@@ -128,6 +137,7 @@ gulp.task('webpack-browser', function () {
       externals: {
         lodash: '_'
       },
+      plugins: webpackPlugins,
       output: {
         filename: 'k2-browser.js',
         library: 'k2',
