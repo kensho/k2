@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.10.1
+ * @version v0.11.0
  */
 /*! @generated @nolint */
 (function webpackUniversalModuleDefinition(root, factory) {
