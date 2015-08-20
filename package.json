@@ -11,10 +11,10 @@
     "Matt Neary <neary@kensho.com>"
   ],
   "dependencies": {
-    "check-more-types": "1.5.0",
+    "check-more-types": "1.8.2",
     "check-types": "1.4.0",
-    "lazy-ass": "0.5.3",
-    "lodash": "3.10.0",
+    "lazy-ass": "0.5.8",
+    "lodash": "3.10.1",
     "ramda": "0.14.0"
   },
   "devDependencies": {

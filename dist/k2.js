@@ -544,6 +544,45 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return a && typeof a.length === 'number';
 	  }
 
+	  function toStringArray(arr) {
+	    return 'array with ' + arr.length + ' items.\n[' +
+	      arr.map(toString).join(',') + ']\n';
+	  }
+
+	  function isPrimitive(arg) {
+	    return typeof arg === 'string' ||
+	      typeof arg === 'number' ||
+	      typeof arg === 'boolean';
+	  }
+
+	  function toString(arg, k) {
+	    if (isPrimitive(arg)) {
+	      return JSON.stringify(arg);
+	    }
+	    if (arg instanceof Error) {
+	      return arg.name + ' ' + arg.message;
+	    }
+
+	    if (Array.isArray(arg)) {
+	      return toStringArray(arg);
+	    }
+	    if (isArrayLike(arg)) {
+	      return toStringArray(Array.prototype.slice.call(arg, 0));
+	    }
+	    var argString;
+	    try {
+	      argString = JSON.stringify(arg, null, 2);
+	    } catch (err) {
+	      argString = '{ cannot stringify arg ' + k + ', it has type "' + typeof arg + '"';
+	      if (typeof arg === 'object') {
+	        argString += ' with keys ' + Object.keys(arg).join(', ') + ' }';
+	      } else {
+	        argString += ' }';
+	      }
+	    }
+	    return argString;
+	  }
+
 	  function formMessage(args) {
 	    var msg = args.reduce(function (total, arg, k) {
 	      if (k) {
@@ -562,21 +601,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	        return total + fnResult;
 	      }
-	      if (Array.isArray(arg)) {
-	        return total + JSON.stringify(arg);
-	      }
-	      if (isArrayLike(arg)) {
-	        return total + JSON.stringify(Array.prototype.slice.call(arg));
-	      }
-	      if (arg instanceof Error) {
-	        return total + arg.name + ' ' + arg.message;
-	      }
-	      var argString;
-	      try {
-	        argString = JSON.stringify(arg, null, 2);
-	      } catch (err) {
-	        argString = '[cannot stringify arg ' + k + ']';
-	      }
+	      var argString = toString(arg, k);
 	      return total + argString;
 	    }, '');
 	    return msg;
@@ -639,7 +664,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
 	 * @license
-	 * lodash 3.10.0 (Custom Build) <https://lodash.com/>
+	 * lodash 3.10.1 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modern -d -o ./index.js`
 	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -652,7 +677,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var undefined;
 
 	  /** Used as the semantic version number. */
-	  var VERSION = '3.10.0';
+	  var VERSION = '3.10.1';
 
 	  /** Used to compose bitmasks for wrapper metadata. */
 	  var BIND_FLAG = 1,
@@ -12999,7 +13024,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  'use strict';
 
 	  /**
-	    Custom assertions and predicates for https://github.com/philbooth/check-types.js
+	    Custom assertions and predicates around https://github.com/philbooth/check-types.js
 	    Created by Kensho https://github.com/kensho
 	    Copyright @ 2014 Kensho https://www.kensho.com/
 	    License: MIT
@@ -13014,6 +13039,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	    check = __webpack_require__(14);
 	  }
 
+	  if (typeof Function.prototype.bind !== 'function') {
+	    throw new Error('Missing Function.prototype.bind, please load es5-shim first');
+	  }
+
 	  /**
 	    Checks if argument is defined or not
 
@@ -13022,6 +13051,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	  */
 	  function defined(value) {
 	    return typeof value !== 'undefined';
+	  }
+
+	  /**
+	    Checks if argument is a valid Date instance
+
+	    @method validDate
+	  */
+	  function validDate(value) {
+	    return check.date(value) &&
+	      check.number(Number(value));
+	  }
+
+	  /**
+	    Returns true if the argument is primitive JavaScript type
+
+	    @method primitive
+	  */
+	  function primitive(value) {
+	    var type = typeof value;
+	    return type === 'number' ||
+	      type === 'boolean' ||
+	      type === 'string';
+	  }
+
+	  /**
+	    Returns true if the value is a number 0
+
+	    @method zero
+	  */
+	  function zero(x) {
+	    return typeof x === 'number' && x === 0;
 	  }
 
 	  /**
@@ -13117,6 +13177,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @method has
 	  */
 	  function has(o, property) {
+	    if (arguments.length !== 2) {
+	      throw new Error('Expected two arguments to check.has, got only ' + arguments.length);
+	    }
 	    return Boolean(o && property &&
 	      typeof property === 'string' &&
 	      typeof o[property] !== 'undefined');
@@ -13366,6 +13429,49 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  /**
+	    Combines multiple predicate functions to produce new OR predicate
+	    @method or
+	  */
+	  function or() {
+	    var predicates = Array.prototype.slice.call(arguments, 0);
+	    if (!predicates.length) {
+	      throw new Error('empty list of arguments to or');
+	    }
+
+	    return function orCheck() {
+	      var values = Array.prototype.slice.call(arguments, 0);
+	      return predicates.some(function (predicate) {
+	        try {
+	          return check.fn(predicate) ?
+	            predicate.apply(null, values) : Boolean(predicate);
+	        } catch (err) {
+	          // treat exceptions as false
+	          return false;
+	        }
+	      });
+	    };
+	  }
+
+	  /**
+	    Combines multiple predicate functions to produce new AND predicate
+	    @method or
+	  */
+	  function and() {
+	    var predicates = Array.prototype.slice.call(arguments, 0);
+	    if (!predicates.length) {
+	      throw new Error('empty list of arguments to or');
+	    }
+
+	    return function orCheck() {
+	      var values = Array.prototype.slice.call(arguments, 0);
+	      return predicates.every(function (predicate) {
+	        return check.fn(predicate) ?
+	          predicate.apply(null, values) : Boolean(predicate);
+	      });
+	    };
+	  }
+
+	  /**
 	  * Public modifier `not`.
 	  *
 	  * Negates `predicate`.
@@ -13381,6 +13487,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /** Adds new predicate to all objects
 	    @method mixin */
 	    check.mixin = function mixin(fn, name) {
+	      if (check.string(fn) && check.fn(name)) {
+	        var tmp = fn;
+	        fn = name;
+	        name = tmp;
+	      }
+
 	      check.verify.fn(fn, 'expected predicate function');
 	      if (!check.unemptyString(name)) {
 	        name = fn.name;
@@ -13467,8 +13579,23 @@ return /******/ (function(modules) { // webpackBootstrap
 	    @method promise
 	  */
 	  function isPromise(p) {
-	    return typeof p === 'object' &&
-	      hasPromiseApi(p);
+	    return check.object(p) && hasPromiseApi(p);
+	  }
+
+	  /**
+	    Shallow strict comparison
+	    @method equal
+	  */
+	  function equal(a, b) {
+	    if (arguments.length === 2) {
+	      return a === b;
+	    } else if (arguments.length === 1) {
+	      return function equalTo(b) {
+	        return a === b;
+	      };
+	    } else {
+	      throw new Error('Expected at least 1 or 2 arguments to check.equal');
+	    }
 	  }
 
 	  // new predicates to be added to check object. Use object to preserve names
@@ -13499,7 +13626,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    arrayOf: arrayOf,
 	    badItems: badItems,
 	    oneOf: oneOf,
-	    promise: isPromise
+	    promise: isPromise,
+	    validDate: validDate,
+	    equal: equal,
+	    or: or,
+	    and: and,
+	    primitive: primitive,
+	    zero: zero
 	  };
 
 	  Object.keys(predicates).forEach(function (name) {
