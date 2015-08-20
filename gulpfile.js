@@ -13,7 +13,6 @@ var gulp = require('gulp'),
   eslint = require('gulp-eslint'),
   uglify = require('gulp-uglify'),
   rename = require('gulp-rename'),
-  notify = require('gulp-notify'),
   del = require('del'),
   watch = require('gulp-watch'),
   gutil = require('gulp-util'),
@@ -115,8 +114,7 @@ gulp.task('webpack', function () {
     .pipe(gulp.dest(dest))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
-    .pipe(gulp.dest(dest))
-    .pipe(notify({ message: 'webpack task complete, includes lodash' }));
+    .pipe(gulp.dest(dest));
 });
 
 gulp.task('webpack-browser', function () {
@@ -142,8 +140,7 @@ gulp.task('webpack-browser', function () {
     .pipe(gulp.dest(dest))
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
-    .pipe(gulp.dest(dest))
-    .pipe(notify({ message: 'webpack (without lodash) browser task complete' }));
+    .pipe(gulp.dest(dest));
 });
 
 gulp.task('mocha', function () {

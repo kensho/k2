@@ -1,7 +1,7 @@
 {
   "name": "k2",
   "description": "Functional javascript utils",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "author": "Martin Camacho martin@kensho.com",
   "bugs": {
     "url": "https://github.com/kensho/k2/issues"
@@ -36,7 +36,6 @@
     "gulp-header": "1.2.2",
     "gulp-mocha": "2.0.0",
     "gulp-ng-html2js": "0.2.0",
-    "gulp-notify": "2.2.0",
     "gulp-rename": "1.2.0",
     "gulp-uglify": "1.1.0",
     "gulp-util": "3.0.4",
