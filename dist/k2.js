@@ -274,6 +274,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function cleanTickerSearchHtml(html) {
 	  la(check.string(html), "expected string", html);
+
+	  var XML_COMMENT_REGEX = /<!--.*?-->/g;
+	  html = html.replace(XML_COMMENT_REGEX, " ");
+
 	  html = html.replace(HTML_TAG_REPLACE_REGEX, "\n");
 
 	  var NON_BREAKING_REGEX = /&nbsp;/g;

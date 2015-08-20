@@ -1,6 +1,7 @@
-/* global describe, it, xit */
+/* global describe, it */
 require('lazy-ass');
 var check = require('check-more-types');
+var _ = require('lodash');
 
 import { cleanEnteredSearchText, cleanHtmlTags, cleanTickerSearchHtml } from './clean-text.es6';
 
@@ -196,27 +197,32 @@ describe('cleanTickerSearchHtml', function () {
     la(clean(txt) === 'foo & bar');
   });
 
-  xit('handles entire table with comments', function () {
+  it('handles entire table with comments', function () {
     var txt = '\n\n\n<table border="0" cellpadding="0" cellspacing="0" width="65" style="width: 65pt;">' +
       '<!--StartFragment-->\n' +
       '<colgroup><col width="65" style="width:65pt">' +
       '</colgroup><tbody><tr height="15" style="height:15.0pt">' +
-      '  <td height="15" width="65" style="height:15.0pt;width:65pt">AEE</td>' +
+      '  <td height="15" width="65" style="height:15.0pt;width:65pt">one</td>' +
       '</tr>' +
       '<tr height="15" style="height:15.0pt">' +
-        '<td height="15" style="height:15.0pt">AEP</td>' +
+        '<td height="15" style="height:15.0pt">two</td>' +
       '</tr>' +
       '<tr height="15" style="height:15.0pt">' +
-      '<td height="15" style="height:15.0pt">AES</td>' +
+      '<td height="15" style="height:15.0pt">three</td>' +
       '</tr>' +
       '<tr height="15" style="height:15.0pt">' +
-      '<td height="15" style="height:15.0pt">CMS</td>' +
+      '<td height="15" style="height:15.0pt">four</td>' +
       '</tr>' +
       '<!--EndFragment-->' +
       '</tbody></table>';
     var cleaned = clean(txt);
-    console.log('cleaned', cleaned);
-    la(cleaned.indexOf('StartFragment') === -1, 'could not clean HTML comment', cleaned);
+    la(cleaned.indexOf('StartFragment') === -1,
+      'could not clean start HTML comment', cleaned);
+    la(cleaned.indexOf('EndFragment') === -1,
+      'could not clean end HTML comment', cleaned);
+    var strings = cleaned.split(/\s/).filter(check.unemptyString);
+    la(_.isEqual(strings, ['one', 'two', 'three', 'four']),
+      'invalid extracted strings', strings);
   });
 });
 
