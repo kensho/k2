@@ -1,9 +1,14 @@
 /* global describe, it */
 require('lazy-ass');
+var check = require('check-more-types');
 var R = require('ramda');
 import objectLens from './immutable-objects.es6';
 
 describe('immutable objects', function () {
+  it('is a function', function () {
+    la(check.fn(objectLens));
+  });
+
   it('gets object value for key', function () {
     var o = { name: 'joe' };
     la(o.name === objectLens('name')(o));
