@@ -30,12 +30,6 @@ var banner = ['/**',
   ' */',
   ''].join('\n');
 
-var isVerbose = process.argv.some(function (arg) {
-  return arg === '-v' || arg === '--verbose';
-});
-
-require('gulp-grunt')(gulp, { verbose: isVerbose });
-
 var allSources = glob.sync('src/*.{es6,js}');
 log.log('all source files:\n' + allSources.join('\n  '));
 
@@ -170,7 +164,7 @@ gulp.task('mocha', function () {
     }));
 });
 
-gulp.task('test', ['mocha', 'grunt-clean-console']);
+gulp.task('test', ['mocha']);
 
 gulp.task('watch', function() {
   var options = { ignoreInitial: true };
@@ -181,6 +175,6 @@ gulp.task('watch', function() {
 
 gulp.task('lint', ['lint:src', 'lint:specs', 'lint:gulpfile']);
 
-gulp.task('default', ['deps-ok', 'grunt-nice-package', 'clean'], function () {
+gulp.task('default', ['deps-ok', 'clean'], function () {
   gulp.start('lint', 'webpack', 'webpack-browser');
 });
