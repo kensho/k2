@@ -1,4 +1,4 @@
-/* global describe, it */
+/* global describe, it, xit */
 require('lazy-ass');
 var check = require('check-more-types');
 
@@ -194,6 +194,29 @@ describe('cleanTickerSearchHtml', function () {
   it('allows ampersands', function () {
     var txt = 'foo &amp; bar';
     la(clean(txt) === 'foo & bar');
+  });
+
+  xit('handles entire table with comments', function () {
+    var txt = '\n\n\n<table border="0" cellpadding="0" cellspacing="0" width="65" style="width: 65pt;">' +
+      '<!--StartFragment-->\n' +
+      '<colgroup><col width="65" style="width:65pt">' +
+      '</colgroup><tbody><tr height="15" style="height:15.0pt">' +
+      '  <td height="15" width="65" style="height:15.0pt;width:65pt">AEE</td>' +
+      '</tr>' +
+      '<tr height="15" style="height:15.0pt">' +
+        '<td height="15" style="height:15.0pt">AEP</td>' +
+      '</tr>' +
+      '<tr height="15" style="height:15.0pt">' +
+      '<td height="15" style="height:15.0pt">AES</td>' +
+      '</tr>' +
+      '<tr height="15" style="height:15.0pt">' +
+      '<td height="15" style="height:15.0pt">CMS</td>' +
+      '</tr>' +
+      '<!--EndFragment-->' +
+      '</tbody></table>';
+    var cleaned = clean(txt);
+    console.log('cleaned', cleaned);
+    la(cleaned.indexOf('StartFragment') === -1, 'could not clean HTML comment', cleaned);
   });
 });
 

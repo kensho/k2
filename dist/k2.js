@@ -519,15 +519,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = fanout;
 
 	function fanout() {
-	  var fns = [].slice.call(arguments);
+	  for (var _len = arguments.length, fns = Array(_len), _key = 0; _key < _len; _key++) {
+	    fns[_key] = arguments[_key];
+	  }
+
 	  return function (x) {
 	    return fns.map(function (fn) {
 	      return fn(x);
 	    });
 	  };
 	}
-
-	/* fs */
 
 /***/ },
 /* 9 */
