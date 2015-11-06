@@ -54,6 +54,7 @@
     "karma-ng-json2js-preprocessor": "1.0.0",
     "karma-phantomjs-launcher": "0.1.4",
     "lazy-ass-helpful": "0.6.1",
+    "mocha": "2.3.3",
     "mocha-traceur": "2.1.0",
     "modernizr": "3.0.0-alpha.3",
     "ng-describe": "0.10.1",
