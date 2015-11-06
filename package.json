@@ -86,7 +86,7 @@
   },
   "scripts": {
     "build-and-test": "gulp && npm test",
-    "test": "gulp test; npm run test-under-node; npm run load-from-node",
+    "test": "gulp test && npm run test-under-node && npm run load-from-node",
     "test-under-node": "npm run mocha",
     "mocha": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6",
     "load-from-node": "node dist/k2.js",
