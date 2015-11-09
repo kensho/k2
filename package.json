@@ -14,7 +14,9 @@
         "npm test",
         "npm run test-browser"
       ],
-      "post-commit": "npm version"
+      "post-commit": "npm version",
+      "pre-push": [],
+      "post-merge": []
     }
   },
   "contributors": [
@@ -22,7 +24,7 @@
     "Matt Neary <neary@kensho.com>"
   ],
   "czConfig": {
-    "path": "node_modules/cz-conventional-changelog"
+    "path": "node_modules/pre-git/node_modules/cz-conventional-changelog"
   },
   "dependencies": {
     "check-more-types": "1.8.2",
@@ -34,9 +36,7 @@
   "devDependencies": {
     "babel-core": "4.7.16",
     "babel-loader": "4.2.0",
-    "commitizen": "2.4.1",
     "console-log-div": "0.5.0",
-    "cz-conventional-changelog": "1.1.4",
     "debug-logdown": "0.2.0",
     "del": "1.1.1",
     "deps-ok": "0.8.1",
@@ -75,7 +75,7 @@
     "modernizr": "3.0.0-alpha.3",
     "ng-describe": "0.10.1",
     "ng-waffle": "0.2.2",
-    "pre-git": "1.0.0",
+    "pre-git": "1.2.1",
     "quote": "0.4.0",
     "spy-on-lazy-ass": "0.0.1",
     "webpack": "1.7.3"
@@ -104,6 +104,6 @@
     "watch": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6 --watch",
     "package": "grunty grunt-nice-package nicePackage grunt-config.js",
     "test-browser": "grunty grunt-clean-console clean-console grunt-config.js",
-    "commit": "git-cz"
+    "commit": "./node_modules/pre-git/node_modules/commitizen/bin/git-cz"
   }
 }
