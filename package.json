@@ -15,7 +15,10 @@
         "npm run test-browser"
       ],
       "post-commit": "npm version",
-      "pre-push": [],
+      "pre-push": [
+        "npm run size",
+        "npm run pkgfiles"
+      ],
       "post-merge": []
     }
   },
@@ -41,6 +44,7 @@
     "del": "1.1.1",
     "deps-ok": "0.8.1",
     "es5-shim": "4.1.0",
+    "git-issues": "1.2.0",
     "glob": "5.0.3",
     "grunt-clean-console": "0.2.0",
     "grunt-nice-package": "0.9.2",
@@ -75,6 +79,7 @@
     "modernizr": "3.0.0-alpha.3",
     "ng-describe": "0.10.1",
     "ng-waffle": "0.2.2",
+    "pkgfiles": "2.3.0",
     "pre-git": "1.2.1",
     "quote": "0.4.0",
     "spy-on-lazy-ass": "0.0.1",
@@ -95,6 +100,9 @@
     "type": "git",
     "url": "https://github.com/kensho/k2.git"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build-and-test": "gulp && npm test",
     "test": "gulp test && npm run test-under-node && npm run load-from-node",
@@ -104,6 +112,9 @@
     "watch": "mocha -R spec --compilers es6:mocha-traceur src/**/*-spec.es6 --watch",
     "package": "grunty grunt-nice-package nicePackage grunt-config.js",
     "test-browser": "grunty grunt-clean-console clean-console grunt-config.js",
-    "commit": "./node_modules/pre-git/node_modules/commitizen/bin/git-cz"
+    "commit": "git-issues && ./node_modules/pre-git/node_modules/commitizen/bin/git-cz",
+    "issues": "git-issues",
+    "pkgfiles": "pkgfiles",
+    "size": "tarball=\"$(npm pack .)\"; wc -c \"${tarball}\"; tar tvf \"${tarball}\"; rm \"${tarball}\";"
   }
 }
