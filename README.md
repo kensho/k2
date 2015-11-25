@@ -4,6 +4,7 @@
 
 [![NPM][k2-icon] ][k2-url]
 
+[![manpm](https://img.shields.io/badge/manpm-%E2%9C%93-3399ff.svg)](https://github.com/bahmutov/manpm)
 [![Circle CI](https://circleci.com/gh/kensho/k2.svg?style=svg)](https://circleci.com/gh/kensho/k2)
 [![Code Climate](https://codeclimate.com/github/kensho/k2/badges/gpa.svg)](https://codeclimate.com/github/kensho/k2)
 
