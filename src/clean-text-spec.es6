@@ -224,5 +224,30 @@ describe('cleanTickerSearchHtml', function () {
     la(_.isEqual(strings, ['one', 'two', 'three', 'four']),
       'invalid extracted strings', strings);
   });
+
+  it('handles hairy attributes', function () {
+    var txt = '<td style="padding:2px 3px 2px 3px;vertical-align:bottom;" ' +
+      'data-sheets-value="{&quot;1&quot;:2 &quot;2&quot;:&quot;^GSPC&quot;}">^GSPC';
+    var cleaned = clean(txt);
+    la(cleaned === '^GSPC', cleaned);
+  });
+
+  it('cleans multiple hairy tags', function () {
+    var txt = '<td style="padding:2px 3px 2px 3px;vertical-align:bottom;border-top:1px solid ' +
+      '#000000;border-right:1px solid #000000;border-bottom:1px solid #000000;border-left:1px ' +
+      'solid #000000;" data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;F&quot;}">F\n' +
+      '<td style="padding:2px 3px 2px 3px;vertical-align:bottom;" ' +
+      'data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;^GSPC&quot;}">^GSPC\n\n' +
+      '<td style="padding:2px 3px 2px 3px;vertical-align:bottom;background-color:#ea9999;" ' +
+      'data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;GOOG&quot;}">GOOG\n' +
+      '<td style="padding:2px 3px 2px 3px;vertical-align:bottom;" ' +
+      'data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;A&quot;}">A\n\n\n' +
+      '<td style="padding:2px 3px 2px 3px;vertical-align:bottom;" ' +
+      'data-sheets-value="{&quot;1&quot;:2,&quot;2&quot;:&quot;AMZN&quot;}">AMZN\n';
+    var cleaned = clean(txt);
+    var ts = cleaned.split('\n').map(_.trim).filter(check.unemptyString);
+    var expected = ['F', '^GSPC', 'GOOG', 'A', 'AMZN'];
+    la(_.isEqual(ts, expected), ts);
+  });
 });
 

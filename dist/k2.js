@@ -269,11 +269,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return str.replace(HTML_TAG_REPLACE_REGEX, replaceWith);
 	}
 
+	function cleanAttributes(text) {
+	  var doubleQuotes = /"[^"]+"/g;
+	  return text.replace(doubleQuotes, "\"\"");
+	}
+
+	function mergeWhiteSpaces(text) {
+	  // replace single no break symbol with space
+	  text = text.replace(/\s$/, " ");
+	  text = text.replace(/^\s*/, "");
+	  text = text.replace(/\n+/, "\n");
+	  return text;
+	}
 	function cleanTickerSearchHtml(html) {
 	  la(check.string(html), "expected string", html);
 
 	  var XML_COMMENT_REGEX = /<!--.*?-->/g;
 	  html = html.replace(XML_COMMENT_REGEX, " ");
+
+	  html = cleanAttributes(html);
 
 	  html = html.replace(HTML_TAG_REPLACE_REGEX, "\n");
 
@@ -283,10 +297,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var AMPERSAND_REGEX = /&amp;/g;
 	  html = html.replace(AMPERSAND_REGEX, "&");
 
-	  // replace single no break symbol with space
-	  html = html.replace(/\s$/, " ");
-	  html = html.replace(/^\s*/, "");
-	  html = html.replace(/\n+/, "\n");
+	  html = mergeWhiteSpaces(html);
 	  return html;
 	}
 

@@ -23,6 +23,19 @@ export function cleanHtmlTags(str, replaceWith) {
   return str.replace(HTML_TAG_REPLACE_REGEX, replaceWith);
 }
 
+function cleanAttributes(text) {
+  var doubleQuotes = /"[^"]+"/g;
+  return text.replace(doubleQuotes, '""');
+}
+
+function mergeWhiteSpaces(text) {
+  // replace single no break symbol with space
+  text = text.replace(/\s$/, ' ');
+  text = text.replace(/^\s*/, '');
+  text = text.replace(/\n+/, '\n');
+  return text;
+}
+
 // cleans whatever user pasted into the HTML ticker search box
 // NOTE: does not trim spaces
 export function cleanTickerSearchHtml(html) {
@@ -30,6 +43,8 @@ export function cleanTickerSearchHtml(html) {
 
   var XML_COMMENT_REGEX = /<!--.*?-->/g;
   html = html.replace(XML_COMMENT_REGEX, ' ');
+
+  html = cleanAttributes(html);
 
   html = html.replace(HTML_TAG_REPLACE_REGEX, '\n');
 
@@ -39,9 +54,6 @@ export function cleanTickerSearchHtml(html) {
   var AMPERSAND_REGEX = /&amp;/g;
   html = html.replace(AMPERSAND_REGEX, '&');
 
-  // replace single no break symbol with space
-  html = html.replace(/\s$/, ' ');
-  html = html.replace(/^\s*/, '');
-  html = html.replace(/\n+/, '\n');
+  html = mergeWhiteSpaces(html);
   return html;
 }
