@@ -42,6 +42,20 @@ describe('cleanHtmlTags', function () {
     la(result === 'f', result);
   });
 
+  it('removes b and i tags', function () {
+    la(cleanHtmlTags('<b>foo</b>') === 'foo');
+    la(cleanHtmlTags('<i>foo</i>') === 'foo');
+  });
+
+  it('removes mismatched tags', function () {
+    la(cleanHtmlTags('<b>foo</i>') === 'foo');
+    la(cleanHtmlTags('<no>foo</yes>') === 'foo');
+  });
+
+  it('removes tags with dashes', function () {
+    la(cleanHtmlTags('<foo-bar>foo</foo-bar>') === 'foo');
+  });
+
   it('removes html tags, can leaves space', function () {
     la(cleanHtmlTags('<a></a>') === '');
     la(cleanHtmlTags('<a>f</a>', ' ') === ' f ');
@@ -54,6 +68,22 @@ describe('cleanHtmlTags', function () {
 
   it('leaves words before and after closing tag', function () {
     la(cleanHtmlTags('before <a>link</a> after') === 'before link after');
+  });
+
+  it('cleans complex tag', function () {
+    var text = 'b <a rel="noopener noreferrer" ' +
+      'target="_blank">link</a> after 2';
+    var cleaned = cleanHtmlTags(text);
+    var expected = 'b link after 2';
+    la(cleaned === expected, 'could not clean', text, 'got', cleaned);
+  });
+
+  it('cleans tag with href attribute correctly', function () {
+    var text = 'b <a href="http://foo" rel="noopener noreferrer" ' +
+      'target="_blank">link</a> after 2';
+    var cleaned = cleanHtmlTags(text);
+    var expected = 'b link after 2';
+    la(cleaned === expected, 'could not clean', text, 'got', cleaned);
   });
 
   it('can cleanup attributes', function () {
