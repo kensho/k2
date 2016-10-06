@@ -48,6 +48,14 @@ describe('cleanHtmlTags', function () {
     la(cleanHtmlTags('<h3>author here</h3>') === 'author here');
   });
 
+  it('leaves words after closing tag', function () {
+    la(cleanHtmlTags('<a>link</a> after') === 'link after');
+  });
+
+  it('leaves words before and after closing tag', function () {
+    la(cleanHtmlTags('before <a>link</a> after') === 'before link after');
+  });
+
   it('can cleanup attributes', function () {
     var html = '<a id="a">f</a>';
     la(cleanHtmlTags(html) === 'f');
