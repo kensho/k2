@@ -49,7 +49,7 @@
     "git-issues": "1.2.0",
     "glob": "5.0.3",
     "grunt-clean-console": "0.2.0",
-    "grunt-nice-package": "0.9.2",
+    "grunt-nice-package": "0.10.2",
     "grunty": "0.2.0",
     "gulp": "3.8.11",
     "gulp-babel": "4.0.0",
@@ -94,9 +94,9 @@
   ],
   "homepage": "https://github.com/kensho/k2",
   "keywords": [
+    "functional",
     "javascript",
-    "js",
-    "functional"
+    "js"
   ],
   "license": "MIT",
   "main": "dist/k2.js",
@@ -106,16 +106,16 @@
   },
   "scripts": {
     "build-and-test": "gulp && npm test",
-    "test": "gulp test && npm run test-under-node && npm run load-from-node",
-    "test-under-node": "npm run mocha",
-    "mocha": "mocha -R spec --compilers js:babel-register src/**/*-spec.es6",
-    "load-from-node": "node dist/k2.js",
-    "watch": "mocha -R spec --compilers js:babel-register --watch src/**/*-spec.es6",
-    "package": "grunty grunt-nice-package nicePackage grunt-config.js",
-    "test-browser": "grunty grunt-clean-console clean-console grunt-config.js",
     "commit": "git-issues && ./node_modules/pre-git/node_modules/commitizen/bin/git-cz",
     "issues": "git-issues",
+    "load-from-node": "node dist/k2.js",
+    "mocha": "mocha -R spec --compilers js:babel-register src/**/*-spec.es6",
+    "package": "grunty grunt-nice-package nicePackage grunt-config.js",
     "pkgfiles": "pkgfiles",
-    "size": "tarball=\"$(npm pack .)\"; wc -c \"${tarball}\"; tar tvf \"${tarball}\"; rm \"${tarball}\";"
+    "size": "tarball=\"$(npm pack .)\"; wc -c \"${tarball}\"; tar tvf \"${tarball}\"; rm \"${tarball}\";",
+    "test": "gulp test && npm run test-under-node && npm run load-from-node",
+    "test-browser": "grunty grunt-clean-console clean-console grunt-config.js",
+    "test-under-node": "npm run mocha",
+    "watch": "mocha -R spec --compilers js:babel-register --watch src/**/*-spec.es6"
   }
 }
