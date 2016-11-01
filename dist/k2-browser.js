@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.14.1
+ * @version v0.14.2
  */
 /*! @generated @nolint */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -104,6 +104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  cleanTickerSearchHtml: _cleanText.cleanTickerSearchHtml,
 	  fanout: _fanout2.default
 	};
+	module.exports = exports['default'];
 
 /***/ },
 /* 1 */
@@ -159,6 +160,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	exports.default = findPartialMatchesMultipleProperties;
+	module.exports = exports['default'];
 
 /***/ },
 /* 2 */
@@ -245,6 +247,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	exports.default = rankPartialMatchesMultipleProperties;
+	module.exports = exports['default'];
 
 /***/ },
 /* 3 */
@@ -454,6 +457,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	exports.default = guessDateFormat;
+	module.exports = exports['default'];
 
 /***/ },
 /* 5 */
@@ -493,6 +497,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	exports.default = onlyTrue;
+	module.exports = exports["default"];
 
 /***/ },
 /* 6 */
@@ -520,6 +525,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	exports.default = _.curry(presentProperties);
+	module.exports = exports['default'];
 
 /***/ },
 /* 7 */
@@ -542,6 +548,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 	  };
 	}
+	module.exports = exports["default"];
 
 /***/ },
 /* 8 */
