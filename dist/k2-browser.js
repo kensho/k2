@@ -1,6 +1,6 @@
 /**
  * k2 - Functional javascript utils
- * @version v0.13.0
+ * @version v0.14.1
  */
 /*! @generated @nolint */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -59,53 +59,68 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	var _interopRequire = function (obj) { return obj && obj.__esModule ? obj["default"] : obj; };
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	var findPartialMatches = _interopRequire(__webpack_require__(1));
+	var _findPartialMatches = __webpack_require__(1);
 
-	var rankPartialMatches = _interopRequire(__webpack_require__(2));
+	var _findPartialMatches2 = _interopRequireDefault(_findPartialMatches);
 
-	var _cleanTextEs6 = __webpack_require__(3);
+	var _rankPartialMatches = __webpack_require__(2);
 
-	var cleanEnteredSearchText = _cleanTextEs6.cleanEnteredSearchText;
-	var cleanHtmlTags = _cleanTextEs6.cleanHtmlTags;
-	var cleanTickerSearchHtml = _cleanTextEs6.cleanTickerSearchHtml;
+	var _rankPartialMatches2 = _interopRequireDefault(_rankPartialMatches);
 
-	var guessDateFormat = _interopRequire(__webpack_require__(4));
+	var _cleanText = __webpack_require__(3);
 
-	var onlyTrue = _interopRequire(__webpack_require__(5));
+	var _guessDateFormat = __webpack_require__(4);
 
-	var presentProperties = _interopRequire(__webpack_require__(6));
+	var _guessDateFormat2 = _interopRequireDefault(_guessDateFormat);
 
-	var fanout = _interopRequire(__webpack_require__(7));
+	var _onlyTrue = __webpack_require__(5);
 
-	module.exports = {
-	  findPartialMatches: findPartialMatches,
-	  rankPartialMatches: rankPartialMatches,
-	  guessDateFormat: guessDateFormat,
-	  onlyTrue: onlyTrue,
-	  presentProperties: presentProperties,
-	  cleanEnteredText: cleanEnteredSearchText,
-	  cleanHtmlTags: cleanHtmlTags,
-	  cleanTickerSearchHtml: cleanTickerSearchHtml,
-	  fanout: fanout
+	var _onlyTrue2 = _interopRequireDefault(_onlyTrue);
+
+	var _presentProperties = __webpack_require__(6);
+
+	var _presentProperties2 = _interopRequireDefault(_presentProperties);
+
+	var _fanout = __webpack_require__(7);
+
+	var _fanout2 = _interopRequireDefault(_fanout);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.default = {
+	  findPartialMatches: _findPartialMatches2.default,
+	  rankPartialMatches: _rankPartialMatches2.default,
+	  guessDateFormat: _guessDateFormat2.default,
+	  onlyTrue: _onlyTrue2.default,
+	  presentProperties: _presentProperties2.default,
+	  cleanEnteredText: _cleanText.cleanEnteredSearchText,
+	  cleanHtmlTags: _cleanText.cleanHtmlTags,
+	  cleanTickerSearchHtml: _cleanText.cleanTickerSearchHtml,
+	  fanout: _fanout2.default
 	};
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	__webpack_require__(9);
 	var check = __webpack_require__(10);
 
 	function findPartialMatchesSingleProperty(property, items, queryText) {
-	  la(check.unemptyString(property), "need property name", property);
-	  la(check.array(items), "expected list of items", items);
-	  la(check.string(queryText), "expected query string", queryText);
+	  la(check.unemptyString(property), 'need property name', property);
+	  la(check.array(items), 'expected list of items', items);
+	  la(check.string(queryText), 'expected query string', queryText);
 	  if (!queryText) {
 	    return [];
 	  }
@@ -122,9 +137,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (check.string(properties)) {
 	    return findPartialMatchesSingleProperty(properties, items, queryText);
 	  }
-	  la(check.arrayOfStrings(properties), "need properties", properties);
-	  la(check.array(items), "expected list of items", items);
-	  la(check.string(queryText), "expected query string", queryText);
+	  la(check.arrayOfStrings(properties), 'need properties', properties);
+	  la(check.array(items), 'expected list of items', items);
+	  la(check.string(queryText), 'expected query string', queryText);
 	  if (!queryText) {
 	    return [];
 	  }
@@ -143,23 +158,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return items.filter(hasQueryText);
 	}
 
-	module.exports = findPartialMatchesMultipleProperties;
+	exports.default = findPartialMatchesMultipleProperties;
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	__webpack_require__(9);
 	var check = __webpack_require__(10);
 	var _ = __webpack_require__(8);
 
 	// given objects that match query text, rank them, with better matches first
 	function rankPartialMatchesSingleProperty(property, matches, queryText) {
-	  la(check.unemptyString(property), "need property name", property);
-	  la(check.array(matches), "expected list of matches", matches);
-	  la(check.string(queryText), "expected query string", queryText);
+	  la(check.unemptyString(property), 'need property name', property);
+	  la(check.array(matches), 'expected list of matches', matches);
+	  la(check.string(queryText), 'expected query string', queryText);
 	  if (!matches.length || !queryText) {
 	    return [];
 	  }
@@ -168,7 +186,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // ranks items, whereby a lower number is a better rank, assumes item
 	  // matches the query string.
 	  function rankMatch(item) {
-	    var NOT_FOUND_RANK = 1000000;
+	    var NOT_FOUND_RANK = 1e6;
 	    var matchText = item[property].toLowerCase();
 	    if (matchText === text) {
 	      return -1;
@@ -187,9 +205,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	  if (check.string(properties)) {
 	    return rankPartialMatchesSingleProperty(properties, matches, queryText);
 	  }
-	  la(check.arrayOfStrings(properties), "need properties", properties);
-	  la(check.array(matches), "expected list of matches", matches);
-	  la(check.string(queryText), "expected query string", queryText);
+	  la(check.arrayOfStrings(properties), 'need properties', properties);
+	  la(check.array(matches), 'expected list of matches', matches);
+	  la(check.string(queryText), 'expected query string', queryText);
 	  if (!matches.length || !queryText) {
 	    return [];
 	  }
@@ -198,7 +216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  // ranks items, whereby a lower number is a better rank, assumes item
 	  // matches the query string.
 	  function rankMatch(property, item) {
-	    var NOT_FOUND_RANK = 1000000;
+	    var NOT_FOUND_RANK = 1e6;
 	    var matchText = item[property];
 	    if (!matchText) {
 	      return NOT_FOUND_RANK;
@@ -226,76 +244,79 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return _.sortBy(matches, rankMatches);
 	}
 
-	module.exports = rankPartialMatchesMultipleProperties;
+	exports.default = rankPartialMatchesMultipleProperties;
 
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.cleanEnteredSearchText = cleanEnteredSearchText;
+	exports.cleanHtmlTags = cleanHtmlTags;
+	exports.cleanTickerSearchHtml = cleanTickerSearchHtml;
+	__webpack_require__(9);
+	var check = __webpack_require__(10);
+	var _ = __webpack_require__(8);
 
 	/**
 	Removes HTML entities added by TextArea. Used in ticker search
 	@method cleanEnteredSearchText */
-	"use strict";
-
-	exports.cleanEnteredSearchText = cleanEnteredSearchText;
-
-	// cleans html tags out of a string
-	exports.cleanHtmlTags = cleanHtmlTags;
-
-	// cleans whatever user pasted into the HTML ticker search box
-	// NOTE: does not trim spaces
-	exports.cleanTickerSearchHtml = cleanTickerSearchHtml;
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	__webpack_require__(9);
-	var check = __webpack_require__(10);
-	var _ = __webpack_require__(8);
 	function cleanEnteredSearchText(str) {
-	  la(check.string(str), "expected string to clean", str);
+	  la(check.string(str), 'expected string to clean', str);
 	  str = str.toLowerCase();
-	  str = str.replace("&nbsp;", " ");
+	  str = str.replace('&nbsp;', ' ');
 	  str = str.trim();
 	  str = _.unescape(str);
 	  return str;
 	}
 
-	var HTML_TAG_REPLACE_REGEX = /<\/?[a-zA-Z-0-9\ \(\);,:"'%=&\.\$\^\[\]#]*>/g;
+	var STYLE_TAG = /<style\ ?[\w\W\s]*>[\w\W\s]*<\/style>/g;
+	var HTML_TAG_REPLACE_REGEX = /<\/?[a-zA-Z-0-9_\ \(\);,\/:"'%=&\.\$\^\[\]#]*>/g;
+
+	// cleans html tags out of a string
 	function cleanHtmlTags(str, replaceWith) {
-	  la(check.string(str), "expected string", str);
-	  replaceWith = replaceWith || "";
+	  la(check.string(str), 'expected string', str);
+	  replaceWith = replaceWith || '';
 	  return str.replace(HTML_TAG_REPLACE_REGEX, replaceWith);
 	}
 
 	function cleanAttributes(text) {
 	  var doubleQuotes = /"[^"]+"/g;
-	  return text.replace(doubleQuotes, "\"\"");
+	  return text.replace(doubleQuotes, '""');
 	}
 
 	function mergeWhiteSpaces(text) {
 	  // replace single no break symbol with space
-	  text = text.replace(/\s$/, " ");
-	  text = text.replace(/^\s*/, "");
-	  text = text.replace(/\n+/, "\n");
+	  text = text.replace(/\s$/, ' ');
+	  text = text.replace(/^\s*/, '');
+	  text = text.replace(/\n+/, '\n');
 	  return text;
 	}
+
+	// cleans whatever user pasted into the HTML ticker search box
+	// NOTE: does not trim spaces
 	function cleanTickerSearchHtml(html) {
-	  la(check.string(html), "expected string", html);
+	  la(check.string(html), 'expected string', html);
 
 	  var XML_COMMENT_REGEX = /<!--.*?-->/g;
-	  html = html.replace(XML_COMMENT_REGEX, " ");
+	  html = html.replace(XML_COMMENT_REGEX, ' ');
+
+	  // remove style tags
+	  html = html.replace(STYLE_TAG, ' ');
 
 	  html = cleanAttributes(html);
 
-	  html = html.replace(HTML_TAG_REPLACE_REGEX, "\n");
+	  html = html.replace(HTML_TAG_REPLACE_REGEX, '\n');
 
 	  var NON_BREAKING_REGEX = /&nbsp;/g;
-	  html = html.replace(NON_BREAKING_REGEX, " ");
+	  html = html.replace(NON_BREAKING_REGEX, ' ');
 
 	  var AMPERSAND_REGEX = /&amp;/g;
-	  html = html.replace(AMPERSAND_REGEX, "&");
+	  html = html.replace(AMPERSAND_REGEX, '&');
 
 	  html = mergeWhiteSpaces(html);
 	  return html;
@@ -305,8 +326,11 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	__webpack_require__(9);
 	var check = __webpack_require__(10);
 
@@ -323,13 +347,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	function validYearMonthDay(y, m, d) {
-	  la(check.number(y) && check.number(m) && check.number(d), "invalid year or month or day", y, m, d);
+	  la(check.number(y) && check.number(m) && check.number(d), 'invalid year or month or day', y, m, d);
 	  return isYear(y) && isMonth(m) && isDay(d);
 	}
 
 	function isFormat(regex, str) {
-	  la(check.instance(regex, RegExp), "expected regular expression", regex);
-	  la(check.string(str), "expected string", str);
+	  la(check.instance(regex, RegExp), 'expected regular expression', regex);
+	  la(check.string(str), 'expected string', str);
 	  return regex.test(str);
 	}
 
@@ -341,8 +365,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function parseString(regex, indices, str) {
 	  la(check.instance(regex, RegExp));
-	  la(check.object(indices) && validIndices(indices), "missing indices", indices);
-	  la(check.string(str), "missing date string", str);
+	  la(check.object(indices) && validIndices(indices), 'missing indices', indices);
+	  la(check.string(str), 'missing date string', str);
 	  var initial = check.unemptyString(str) && isFormat(regex, str);
 	  if (!initial) {
 	    /* eslint consistent-return:0 */
@@ -359,7 +383,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function parseIfPossible(regex, indices, str) {
 	  var date = parseString(regex, indices, str);
 	  if (date) {
-	    la(validIndices(date), "missing date fields", date);
+	    la(validIndices(date), 'missing date fields', date);
 	    return validYearMonthDay(date.year, date.month, date.day);
 	  }
 	}
@@ -395,17 +419,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 	var formats = {
-	  "YYYY-MM-DD": lift(isYYYYMMDD),
-	  "YYYY-DD-MM": lift(isYYYYDDMM),
-	  "DD-MM-YYYY": lift(isDDMMYYYY),
-	  "MM-DD-YYYY": lift(isMMDDYYYY)
+	  'YYYY-MM-DD': lift(isYYYYMMDD),
+	  'YYYY-DD-MM': lift(isYYYYDDMM),
+	  'DD-MM-YYYY': lift(isDDMMYYYY),
+	  'MM-DD-YYYY': lift(isMMDDYYYY)
 	};
 
 	function findMatchedFormats(strings) {
 	  var matchedFormats = [];
 	  Object.keys(formats).forEach(function (format) {
 	    var formatCheck = formats[format];
-	    la(check.fn(formatCheck), "expected check function", format, formatCheck);
+	    la(check.fn(formatCheck), 'expected check function', format, formatCheck);
 	    if (formatCheck(strings)) {
 	      matchedFormats.push(format);
 	    }
@@ -419,7 +443,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 
 	  var matchedFormats = findMatchedFormats(strings);
-	  la(check.array(matchedFormats), "expected array result", matchedFormats, strings);
+	  la(check.array(matchedFormats), 'expected array result', matchedFormats, strings);
 
 	  if (matchedFormats.length !== 1) {
 	    // no matches or ambiguous dates
@@ -429,12 +453,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return matchedFormats[0];
 	}
 
-	module.exports = guessDateFormat;
+	exports.default = guessDateFormat;
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	/*
 	  Returns true only if for the given list of predicates,
 	  only single one is true, and the rest are false.
@@ -444,8 +473,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  onlyTrue(false, true, true); // false
 	  onlyTrue(false, false, true); // true
 	*/
-	"use strict";
-
 	function onlyTrue() {
 	  var predicates = Array.prototype.slice.call(arguments, 0);
 	  if (!predicates.length) {
@@ -465,22 +492,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return count === 1;
 	}
 
-	module.exports = onlyTrue;
+	exports.default = onlyTrue;
 
 /***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	__webpack_require__(9);
 	var check = __webpack_require__(10);
 	var _ = __webpack_require__(8);
-	la(check.fn(_.has), "missing lodash.has method, version upgrade?", _.VERSION);
+	la(check.fn(_.has), 'missing lodash.has method, version upgrade?', _.VERSION);
 
 	function presentProperties(testProperties, list) {
-	  la(check.arrayOf(check.unemptyString, testProperties), "missing test properties", testProperties);
-	  la(check.array(list), "missing list of objects", list);
+	  la(check.arrayOf(check.unemptyString, testProperties), 'missing test properties', testProperties);
+	  la(check.array(list), 'missing list of objects', list);
 
 	  return testProperties.filter(function (key) {
 	    return list.every(function (object) {
@@ -489,7 +519,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  });
 	}
 
-	module.exports = _.curry(presentProperties);
+	exports.default = _.curry(presentProperties);
 
 /***/ },
 /* 7 */
@@ -497,8 +527,10 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	"use strict";
 
-	module.exports = fanout;
-
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = fanout;
 	function fanout() {
 	  for (var _len = arguments.length, fns = Array(_len), _key = 0; _key < _len; _key++) {
 	    fns[_key] = arguments[_key];

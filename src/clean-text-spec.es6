@@ -287,5 +287,28 @@ describe('cleanTickerSearchHtml', function () {
     var expected = ['F', '^GSPC', 'GOOG', 'A', 'AMZN'];
     la(_.isEqual(ts, expected), ts);
   });
-});
 
+  it('removes style tag experiment', function () {
+    var STYLE_TAG1 = /<style><\/style>/g;
+    var text1 = 'foo <style></style>';
+    la(STYLE_TAG1.test(text1), 'found style in text 1');
+
+    var STYLE_TAG2 = /<style>[\w\W]*<\/style>/g;
+    var text2 = 'foo <style>foo</style>';
+    la(STYLE_TAG2.test(text2), 'found style in text 2');
+  });
+
+  it('removes style tag', function () {
+    var txt = [
+      '<style type="text/css">',
+      'p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 26.0px \'Helvetica Neue\'; color: #000000}',
+      '</style>',
+      '<p class="p1">GOOG APPL</p>'
+    ].join('\n');
+    var cleaned = clean(txt);
+    console.log('cleaned', cleaned);
+    var ts = cleaned.split(' ').map(_.trim).filter(check.unemptyString);
+    var expected = ['GOOG', 'APPL'];
+    la(_.isEqual(ts, expected), ts);
+  });
+});

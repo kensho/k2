@@ -14,6 +14,7 @@ export function cleanEnteredSearchText(str) {
   return str;
 }
 
+var STYLE_TAG = /<style\ ?[\w\W\s]*>[\w\W\s]*<\/style>/g;
 var HTML_TAG_REPLACE_REGEX = /<\/?[a-zA-Z-0-9_\ \(\);,\/:"'%=&\.\$\^\[\]#]*>/g;
 
 // cleans html tags out of a string
@@ -43,6 +44,9 @@ export function cleanTickerSearchHtml(html) {
 
   var XML_COMMENT_REGEX = /<!--.*?-->/g;
   html = html.replace(XML_COMMENT_REGEX, ' ');
+
+  // remove style tags
+  html = html.replace(STYLE_TAG, ' ');
 
   html = cleanAttributes(html);
 
